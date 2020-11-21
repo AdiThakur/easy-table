@@ -11,9 +11,9 @@ class EasyTable {
      */
     constructor(name, parentId, columns, allowSearch) {
 
-        this.table = document.createElement('table')
-        this.head = document.createElement('thead')
-        this.body = document.createElement('tbody')
+        this.table = _createElem('table')
+        this.head = _createElem('thead')
+        this.body = _createElem('tbody')
 
         this.table.setAttribute("name", name)
         this.table.appendChild(this.head)
@@ -53,8 +53,8 @@ class EasyTable {
         }
         let newRow = this.body.insertRow(i)
         for (let j = 0; j < this.colCount; j++) {
-            const newCell = _createCell()
-            newCell.appendChild(_createTest(cells[j]))
+            const newCell = _createElem('td')
+            newCell.appendChild(_createText(cells[j]))
             newRow.appendChild(newCell)
         }
         this.rowCount++
@@ -148,28 +148,29 @@ class EasyTable {
     }
 
     /** Search Functionality. */
+
     _enableSearch = () => {
-        this._addInputField()
+        this._addInputFields()
     }
 
-    _addInputField = () => {
+    _addInputFields = () => {
 
         console.log("Adding form")
-        const row = _createRow()
+        const row = _createElem('tr')
         this.head.appendChild(row)
 
         for (let i = 0; i < this.colCount; i++) {
 
-            const input = document.createElement('input')
+            const input = _createElem('input')
             input.type = "text"
-            input.placeholder = "Type in query"
-            input.style.cssText = "width: 100px"
+            input.placeholder = "Search..."
+            input.style.cssText = "width: 85px"
 
-            const cell = _createCell()
+            const cell = _createElem('td')
             cell.appendChild(input)
             row.appendChild(cell)
         }
-        const submit = document.createElement('input')
+        const submit = _createElem('input')
         submit.type = "submit"
         submit.onclick = this._search
         row.appendChild(submit)
@@ -179,10 +180,33 @@ class EasyTable {
 
         const inputRow = this.head.lastChild
         const queries = []
+        const searchResultsBody = _createElem('tbody')
+
         for (let i = 0; i < this.colCount; i++) {
-            queries.push(inputRow.children[i].text)
+            queries.push(inputRow.children[i].lastChild.value)
         }
-        console.log(queries)
+        const desiredMatches = queries.filter(word => {
+            if (word) {
+                return true
+            }
+        }).length
+
+        for (let i = 0; i < this.rowCount; i++) {
+            const currRow = this.body.children[i]
+            let currRowMatches = 0
+            for (let j = 0; j < this.colCount; j++) {
+                const currCell = currRow.children[j]
+                if (queries[j].includes(currCell.value)) {
+                    currRowMatches++
+                }
+            }
+            if (currRowMatches == desiredMatches) {
+                searchResultsBody.appendChild(currRow)
+            }
+        }
+        console.log("New body: ", searchResultsBody)
+        this.originalBody = this.body
+        this.body = searchResultsBody
     }
 }
 
@@ -190,28 +214,22 @@ class EasyTable {
 
 _setColumns = (columns, head) => {
 
-    const headerRow = _createRow('tr')
+    const headerRow = _createElem('tr')
+    headerRow.style.cssText = "text-align: center"
 
     columns.forEach(colHeader => {
-        let headerCell = _createCell()
-        headerCell.appendChild(_createTest(`${colHeader}`))
+        let headerCell = _createElem('td')
+        headerCell.appendChild(_createText(`${colHeader}`))
         headerRow.appendChild(headerCell)
     });
 
     head.appendChild(headerRow)
 }
 
-
-
-_createCell = () => {
-    return document.createElement('td')
+_createElem = (elemString) => {
+    return document.createElement(elemString)
 }
-
-_createRow = () => {
-    return document.createElement('tr')
-}
-
-_createTest = (text) => {
+_createText = (text) => {
     return document.createTextNode(text)
 }
 
