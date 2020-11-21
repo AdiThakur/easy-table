@@ -10,34 +10,20 @@ class EasyTable {
      */
     constructor(name, parentId, columns) {
 
-        this.name = name
+        this.table = document.createElement('table')
         this.head = document.createElement('thead')
         this.body = document.createElement('tbody')
-        this.columns = [...columns]
-        this.rowCount = 0
 
-        this.table = document.createElement('table')
         this.table.setAttribute("name", name)
         this.table.appendChild(this.head)
         this.table.appendChild(this.body)
 
-        this._setColumns()
+        this.columns = [...columns]
+        this.rowCount = 0
+        _setColumns(this.columns, this.head)
 
         const parentElem = document.querySelector(`#${parentId}`)
         parentElem.appendChild(this.table)
-    }
-
-    _setColumns = () => {
-
-        const headerRow = _createRow('tr')
-
-        this.columns.forEach(colHeader => {
-            let headerCell = _createCell()
-            headerCell.appendChild(_createTest(`${colHeader}`))
-            headerRow.appendChild(headerCell)
-        });
-
-        this.head.appendChild(headerRow)
     }
 
     /** CRUD Methods for Rows.*/
@@ -130,6 +116,19 @@ class EasyTable {
 }
 
 /** Helpers */
+
+_setColumns = (columns, head) => {
+
+    const headerRow = _createRow('tr')
+
+    columns.forEach(colHeader => {
+        let headerCell = _createCell()
+        headerCell.appendChild(_createTest(`${colHeader}`))
+        headerRow.appendChild(headerCell)
+    });
+
+    head.appendChild(headerRow)
+}
 
 _createCell = () => {
     return document.createElement('td')
