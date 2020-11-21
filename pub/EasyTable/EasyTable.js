@@ -149,10 +149,10 @@ class EasyTable {
 
     /** Search Functionality. */
     _enableSearch = () => {
-        this.#addInputField()
+        this._addInputField()
     }
 
-    #addInputField = () => {
+    _addInputField = () => {
 
         console.log("Adding form")
         const row = _createRow()
@@ -171,11 +171,11 @@ class EasyTable {
         }
         const submit = document.createElement('input')
         submit.type = "submit"
-        submit.onclick = this.#search
+        submit.onclick = this._search
         row.appendChild(submit)
     }
 
-    #search = () => {
+    _search = () => {
 
         const inputRow = this.head.lastChild
         const queries = []
