@@ -24,8 +24,12 @@ class EasyTable {
         this.rowCount = 0
         _setColumns(this.columns, this.head)
 
+        // Used for re-setting table after search.
+        this.originalBody = []
+        this.inputs = []
+
         // Optional Arguments
-        allowSearch ? this._enableSearch(this.head, this.columns) : null
+        allowSearch ? this._addInputFields() : null
 
         const parentElem = document.querySelector(`#${parentId}`)
         parentElem.appendChild(this.table)
@@ -122,15 +126,17 @@ class EasyTable {
     /** Methods for Cells. */
 
     /**
-     * @param {Integer} row     Row of desired cell.
-     * @param {Integer} col     Column of desired cell.
+     * @param {Integer} row                     Row of desired cell.
+     * @param {Integer} col                     Column of desired cell.
+     * @returns {HTMLTableCellElement | Null}   Returns cell at position (row, col) on success, null
+     *                                          on failure.
      */
     getCell = (row, col) => {
 
         if (!_valid_index(row, this.rowCount) || !_valid_index(col, this.colCount)) {
             return null
         }
-        return this.body.children[row].children[col].innerHTML
+        return this.body.children[row].children[col]
     }
 
     /**
@@ -147,15 +153,11 @@ class EasyTable {
         return true
     }
 
-    /** Search Functionality. */
+    /** Search Functionality Helpers.*/
 
-    _enableSearch = () => {
-        this._addInputFields()
-    }
-
+    // Helper to populate input fields for search and filter functionality.
     _addInputFields = () => {
 
-        console.log("Adding form")
         const row = _createElem('tr')
         this.head.appendChild(row)
 
@@ -169,18 +171,53 @@ class EasyTable {
             const cell = _createElem('td')
             cell.appendChild(input)
             row.appendChild(cell)
+            this.inputs.push(input)
         }
         const submit = _createElem('input')
         submit.type = "submit"
         submit.onclick = this._search
         row.appendChild(submit)
+
+        const clear = _createElem('input')
+        clear.type = "submit"
+        clear.value = "Clear"
+        clear.onclick = this._resetTable
+        row.appendChild(clear)
     }
 
+    // Reset table to oringinal state (before search).
+    _resetTable = (clearInput) => {
+
+        if (this.originalBody.length == 0) {
+            return
+        }
+        // Clear results.
+        if (this.body) {
+            while (this.body.childElementCount != 0) {
+                this.body.deleteRow(-1)
+            }
+        }
+        // Re-load rows.
+        this.originalBody.forEach(row => {
+            this.body.appendChild(row)
+        });
+        // Clear inputs.
+        if (clearInput) {
+            this.inputs.forEach(input => {
+                input.value = ""
+            });
+        }
+        this.originalBody = []
+    }
+
+    // Search callback.
     _search = () => {
+
+        this._resetTable(false)
 
         const inputRow = this.head.lastChild
         const queries = []
-        const searchResultsBody = _createElem('tbody')
+        const rowsToDel = []
 
         for (let i = 0; i < this.colCount; i++) {
             queries.push(inputRow.children[i].lastChild.value)
@@ -190,27 +227,30 @@ class EasyTable {
                 return true
             }
         }).length
-
+        // Iterating over each row.
         for (let i = 0; i < this.rowCount; i++) {
             const currRow = this.body.children[i]
             let currRowMatches = 0
+            // Iterating over each column.
             for (let j = 0; j < this.colCount; j++) {
                 const currCell = currRow.children[j]
-                if (queries[j].includes(currCell.value)) {
+                if (queries[j].includes(currCell.innerText)) {
                     currRowMatches++
                 }
             }
-            if (currRowMatches == desiredMatches) {
-                searchResultsBody.appendChild(currRow)
+            // If current row matches ALL queries.
+            if (currRowMatches != desiredMatches) {
+                rowsToDel.push(i)
             }
+            this.originalBody.push(currRow)
         }
-        console.log("New body: ", searchResultsBody)
-        this.originalBody = this.body
-        this.body = searchResultsBody
+        rowsToDel.reverse()
+        // Deleting the rows that don't match
+        rowsToDel.forEach(row => {
+            this.body.deleteRow(row)
+        });
     }
 }
-
-/** Private Helpers: Inaccesible by client-code. */
 
 _setColumns = (columns, head) => {
 

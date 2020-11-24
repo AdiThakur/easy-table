@@ -9,6 +9,17 @@ myTable.appendRow(["Accord", "Honda", "2001"])
 myTable.appendRow(["Mustang", "Ford", "1995"])
 myTable.appendRow(["Yaris", "Toyota", "1996"])
 myTable.appendRow(["Model-T", "Ford", "1102"])
-myTable.appendRow(["485", "Ferrari", "1996"])
+myTable.appendRow(["Enzo", "Ferrari", "1996"])
+myTable.appendRow(["458", "Ferrari", "1996"])
+myTable.appendRow(["458", "CarComp", "2020"])
 
-//fr = new FileReader()
+// const enzo = myTable.popRow()
+// const model = myTable.popRow()
+// const civic = myTable.deleteRow(1)
+
+const changeAccordYear = myTable.setRow(1, ["Accord", "Honda", "1970"])
+console.log(changeAccordYear)
+
+// const mustangCell = myTable.getCell(2, 0)
+// console.log(mustangCell)
+// mustangCell.style.cssText = "background-color: red; text-align: center"
