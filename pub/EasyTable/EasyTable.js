@@ -22,7 +22,7 @@ class EasyTable {
         this.columns = [...columns]
         this.colCount = this.columns.length
         this.rowCount = 0
-        _setColumns(this.columns, this.head)
+        this._setColumns()
 
         // Used for re-setting table after search.
         this.originalBody = []
@@ -33,6 +33,21 @@ class EasyTable {
 
         const parentElem = document.querySelector(`#${parentId}`)
         parentElem.appendChild(this.table)
+    }
+
+    // Helpers to initialize the table.
+    _setColumns = () => {
+
+        const headerRow = _createElem('tr')
+        headerRow.style.cssText = "text-align: center"
+
+        this.columns.forEach(colHeader => {
+            let headerCell = _createElem('td')
+            headerCell.appendChild(_createText(`${colHeader}`))
+            headerRow.appendChild(headerCell)
+        });
+
+        this.head.appendChild(headerRow)
     }
 
     /** Methods for Rows (CRUD)*/
@@ -155,14 +170,13 @@ class EasyTable {
 
     /** Search Functionality Helpers.*/
 
-    // Helper to populate input fields for search and filter functionality.
+    // Populate input fields for search functionality.
     _addInputFields = () => {
 
         const row = _createElem('tr')
         this.head.appendChild(row)
 
         for (let i = 0; i < this.colCount; i++) {
-
             const input = _createElem('input')
             input.type = "text"
             input.placeholder = "Search..."
@@ -173,19 +187,18 @@ class EasyTable {
             row.appendChild(cell)
             this.inputs.push(input)
         }
-        const submit = _createElem('input')
-        submit.type = "submit"
-        submit.onclick = this._search
-        row.appendChild(submit)
-
-        const clear = _createElem('input')
-        clear.type = "submit"
-        clear.value = "Clear"
-        clear.onclick = this._resetTable
-        row.appendChild(clear)
+        const createButton = (value, callback, parent) => {
+            let button = _createElem('input')
+            button.type = "submit"
+            button.value = value
+            button.onclick = callback
+            parent.appendChild(button)
+        }
+        createButton("Search", this._search, row)
+        createButton("Clear", this._resetTable, row)
     }
 
-    // Reset table to oringinal state (before search).
+    // Reset table to initial state.
     _resetTable = (clearInput) => {
 
         if (this.originalBody.length == 0) {
@@ -197,7 +210,7 @@ class EasyTable {
                 this.body.deleteRow(-1)
             }
         }
-        // Re-load rows.
+        // Reload rows.
         this.originalBody.forEach(row => {
             this.body.appendChild(row)
         });
@@ -210,7 +223,7 @@ class EasyTable {
         this.originalBody = []
     }
 
-    // Search callback.
+    // Search.
     _search = () => {
 
         this._resetTable(false)
@@ -250,20 +263,6 @@ class EasyTable {
             this.body.deleteRow(row)
         });
     }
-}
-
-_setColumns = (columns, head) => {
-
-    const headerRow = _createElem('tr')
-    headerRow.style.cssText = "text-align: center"
-
-    columns.forEach(colHeader => {
-        let headerCell = _createElem('td')
-        headerCell.appendChild(_createText(`${colHeader}`))
-        headerRow.appendChild(headerCell)
-    });
-
-    head.appendChild(headerRow)
 }
 
 _createElem = (elemString) => {
