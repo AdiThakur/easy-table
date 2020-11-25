@@ -1,0 +1,65 @@
+/* Default Style 1: Light */
+
+.headerCell1 {
+    background-color: rgb(194, 187, 187);
+    font-size: 1.75rem;
+    border: 1px solid #333;
+}
+
+.inputCell1 {
+    padding: 3px;
+    margin: auto;
+}
+
+.dataCell1 {
+    padding: 3px;
+    background-color: rgb(241, 241, 241);
+    font-size: 1.25rem;
+    border: 1px solid #333;
+}
+
+/* Default Style 2: Dark */
+
+.headerCell2 {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-size: 1.75rem;
+    border: 1px solid #333;
+}
+
+.inputCell2 {
+    padding: 3px;
+    margin: auto;
+}
+
+.dataCell2 {
+    background-color: rgb(92, 92, 92);
+    color: white;
+    font-size: 1.25rem;
+
+    padding: 3px;
+    border: 1px solid #333;
+}
+
+/* Default Style 3: Excel */
+
+.headerCell3 {
+    background-color: rgb(91, 126, 223);
+    font-size: 1.75rem;
+    border: 1px solid #333;
+}
+
+.inputCell3 {
+    padding: 3px;
+    margin: auto;
+}
+
+.dataCell3 {
+    padding: 3px;
+    font-size: 1.25rem;
+    border: 1px solid #333;
+}
+
+.dataRow3:nth-child(even) {
+    background-color: rgb(163, 184, 243);
+}

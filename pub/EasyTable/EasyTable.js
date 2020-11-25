@@ -9,7 +9,7 @@ class EasyTable {
      * @param {Array[String]} columns   Array of strings represting column headers.
      * @param {Boolean} allowSearch     Boolean to enable search functionality on columns.
      */
-    constructor(name, parentId, columns, allowSearch) {
+    constructor(name, parentId, columns, allowSearch, defaultStyle) {
 
         this.table = _createElem('table')
         this.head = _createElem('thead')
@@ -22,6 +22,9 @@ class EasyTable {
         this.columns = [...columns]
         this.colCount = this.columns.length
         this.rowCount = 0
+
+        this.style = defaultStyle
+
         this._setColumns()
 
         // Used for re-setting table after search.
@@ -38,11 +41,14 @@ class EasyTable {
     // Helpers to initialize the table.
     _setColumns = () => {
 
+        console.log("headerCell" + this.style)
+
         const headerRow = _createElem('tr')
         headerRow.style.cssText = "text-align: center"
 
         this.columns.forEach(colHeader => {
             let headerCell = _createElem('td')
+            headerCell.setAttribute("class", "headerCell" + this.style)
             headerCell.appendChild(_createText(`${colHeader}`))
             headerRow.appendChild(headerCell)
         });
@@ -71,8 +77,10 @@ class EasyTable {
             return false
         }
         let newRow = this.body.insertRow(i)
+        newRow.setAttribute("class", "dataRow" + this.style)
         for (let j = 0; j < this.colCount; j++) {
             const newCell = _createElem('td')
+            newCell.setAttribute("class", "dataCell" + this.style)
             newCell.appendChild(_createText(cells[j]))
             newRow.appendChild(newCell)
         }
@@ -178,9 +186,10 @@ class EasyTable {
 
         for (let i = 0; i < this.colCount; i++) {
             const input = _createElem('input')
+            // input.type = "search"
             input.type = "text"
             input.placeholder = "Search..."
-            input.style.cssText = "width: 85px"
+            input.setAttribute("class", "inputCell" + this.style)
 
             const cell = _createElem('td')
             cell.appendChild(input)
@@ -265,17 +274,17 @@ class EasyTable {
     }
 }
 
+/** Wrappers to minimize line length and line wrapping. */
+
 _createElem = (elemString) => {
     return document.createElement(elemString)
 }
 _createText = (text) => {
     return document.createTextNode(text)
 }
-
 _valid_index = (i, max) => {
     return (0 <= i && i < max)
 }
-
 _valid_cells = (countCells, maxCells) => {
     return (countCells == maxCells)
 }

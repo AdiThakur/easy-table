@@ -1,7 +1,7 @@
 'use strict'
 const log = console.log
 
-const myTable = new EasyTable("table1", "main", ['Model', 'Brand', 'Year'], true)
+const myTable = new EasyTable("myTable", "main", ['Model', 'Brand', 'Year'], true, 3)
 
 myTable.appendRow(["Camry", "Toyota", "2000"])
 myTable.appendRow(["Civic", "Honda", "2005"])
