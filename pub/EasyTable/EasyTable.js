@@ -24,12 +24,9 @@ class EasyTable {
         this.rowCount = 0
 
         this.style = defaultStyle
+        this.inputs = []
 
         this._setColumns()
-
-        // Used for re-setting table after search.
-        this.originalBody = []
-        this.inputs = []
 
         // Optional Arguments
         allowSearch ? this._addInputFields() : null
@@ -210,37 +207,27 @@ class EasyTable {
     // Reset table to initial state.
     _resetTable = (clearInput) => {
 
-        if (this.originalBody.length == 0) {
-            return
+        // Show all rows.
+        for (let i = 0; i < this.rowCount; i++) {
+            const currRow = this.body.children[i]
+            currRow.style.display = ""
         }
-        // Clear results.
-        if (this.body) {
-            while (this.body.childElementCount != 0) {
-                this.body.deleteRow(-1)
-            }
-        }
-        // Reload rows.
-        this.originalBody.forEach(row => {
-            this.body.appendChild(row)
-        });
         // Clear inputs.
         if (clearInput) {
             this.inputs.forEach(input => {
                 input.value = ""
             });
         }
-        this.originalBody = []
     }
 
-    // Search.
     _search = () => {
 
         this._resetTable(false)
 
         const inputRow = this.head.lastChild
         const queries = []
-        const rowsToDel = []
 
+        // Grab search queries.
         for (let i = 0; i < this.colCount; i++) {
             queries.push(inputRow.children[i].lastChild.value)
         }
@@ -249,28 +236,21 @@ class EasyTable {
                 return true
             }
         }).length
-        // Iterating over each row.
+
+        // Identify rows that match ALL queries.
         for (let i = 0; i < this.rowCount; i++) {
             const currRow = this.body.children[i]
             let currRowMatches = 0
-            // Iterating over each column.
             for (let j = 0; j < this.colCount; j++) {
                 const currCell = currRow.children[j]
                 if (queries[j].includes(currCell.innerText)) {
                     currRowMatches++
                 }
             }
-            // If current row matches ALL queries.
             if (currRowMatches != desiredMatches) {
-                rowsToDel.push(i)
+                currRow.style.display = "none"
             }
-            this.originalBody.push(currRow)
         }
-        rowsToDel.reverse()
-        // Deleting the rows that don't match
-        rowsToDel.forEach(row => {
-            this.body.deleteRow(row)
-        });
     }
 }
 
