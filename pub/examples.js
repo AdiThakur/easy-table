@@ -17,9 +17,11 @@ myTable.appendRow(["458", "CarComp", "2020"])
 // const model = myTable.popRow()
 // const civic = myTable.deleteRow(1)
 
-const changeAccordYear = myTable.setRow(1, ["Accord", "Honda", "1970"])
+const changeAccordYear = myTable.setRow(1, ["Civic", "Honda", "1970"])
 console.log(changeAccordYear)
 
 // const mustangCell = myTable.getCell(2, 0)
 // console.log(mustangCell)
 // mustangCell.style.cssText = "background-color: red; text-align: center"
+
+// https://salty-cove-11433.herokuapp.com/
