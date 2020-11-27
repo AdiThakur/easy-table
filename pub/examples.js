@@ -24,4 +24,27 @@ step3.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step3.insertRow(1, ["458", "Ferrari", "1996"])
 
 step3.setCell(5, 0, "Mustang")
-// https://salty-cove-11433.herokuapp.com/examples.html
+
+const step4 = new EasyTable("step4", "step4Table", ['Model', 'Brand', 'Year'], true, 3)
+step4.appendRow(["Camry", "Toyota", "2000"])
+step4.appendRow(["Civic", "Honda", "2005"])
+step4.appendRow(["Accord", "Honda", "2001"])
+step4.appendRow(["Gustang", "Ford", "1995"])
+step4.appendRow(["Yaris", "Toyota", "1996"])
+step4.appendRow(["Model-T", "Ford", "1102"])
+step4.insertRow(1, ["Enzo", "Ferrari", "1996"])
+step4.insertRow(1, ["458", "Ferrari", "1996"])
+step4.setCell(5, 0, "Mustang")
+
+step4.popRow()
+
+const step5 = new EasyTable("step5", "step5Table", ['Model', 'Brand', 'Year'], false, 2)
+step5.appendRow(["Camry", "Toyota", "2000"])
+step5.appendRow(["Civic", "Honda", "2005"])
+step5.appendRow(["Accord", "Honda", "2001"])
+step5.appendRow(["Gustang", "Ford", "1995"])
+step5.appendRow(["Yaris", "Toyota", "1996"])
+step5.appendRow(["Model-T", "Ford", "1102"])
+step5.insertRow(1, ["Enzo", "Ferrari", "1996"])
+step5.insertRow(1, ["458", "Ferrari", "1996"])
+step5.setCell(5, 0, "Mustang")

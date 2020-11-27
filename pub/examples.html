@@ -47,7 +47,8 @@
         Using the constructor below, we would create an empty table with the headers Model, Brand, and Year. This table
         would be appended to the HTML element with id <strong>"main"</strong>, and would use default style 3.
         Additionally, it would
-        allow users to search its rows (Feel free to try it out in the tables below).
+        allow users to search its rows; the results of the search are the rows that match the combined search query.
+        Feel free to try it out in the tables below.
     </p>
     <p class="code">
         const myTable = new EasyTable("myTable", "main", ['Model', 'Brand', 'Year'], true, 3)
@@ -67,7 +68,7 @@
         myTable.appendRow(["Camry", "Toyota", "2000"]) <br>
         myTable.appendRow(["Civic", "Honda", "2005"]) <br>
         myTable.appendRow(["Accord", "Honda", "2001"]) <br>
-        myTable.appendRow(["Mustang", "Ford", "1995"]) <br>
+        myTable.appendRow(["Gustang", "Ford", "1995"]) <br>
         myTable.appendRow(["Yaris", "Toyota", "1996"]) <br>
         myTable.appendRow(["Model-T", "Ford", "1102"]) <br>
     </p>
@@ -81,6 +82,7 @@
 
 
     <h2>Updating the Table</h2>
+    <h3>Setting Data</h3>
     <p>
         Woops! Looks like I misspelled Mustang. Luckily, EASYTable provides methods that allow users to update tables
         at the granularity of rows OR cells. Realisticaly, these methods would be used to updated specific cells based
@@ -97,6 +99,75 @@
     </p>
     <p><strong>Resulting Table</strong></p>
     <div id="step3Table"></div>
+    <h3>Removing Data</h3>
+    <p>
+        You know what, I no longer want Model-T in our table; its waaaay too old! Once again, as you might have guessed,
+        EASYTable provides multiple easy approaches to the given problem. We can remove the last row by either calling
+        popRow, or deleteRow; popRow always removes from the end of the table, while deleteRow removes a row at
+        a specified index. Calling either of the methods below will remove Model-T from our table.
+    <p><strong>Popping Row</strong></p>
+    <p class="code">
+        myTable.popRow() <br>
+    </p>
+    <p><strong>Deleting Row</strong></p>
+    <p class="code">
+        myTable.deleteRow(7) <br>
+    </p>
+    <p><strong>Resulting Table</strong></p>
+    <div id="step4Table"></div>
+
+
+    <h2>Creating Custom Styles</h2>
+    <p>
+        Users can create numerous styles that are applied to tables upon instanciation. For the Alpha Release,
+        users will be able to use their own custom styles by following the specified naming conventions.
+
+        To specify a new style for...
+
+    <ul>
+        <li>Rows, create the selector .dataRowX</li>
+        <li>Cells, create the selector .dataCellX</li>
+        <li>Column Headers, create the selector .headerCellX</li>
+    </ul>
+
+    where X is any integer larger than 3.
+    </p>
+    <p>
+        For example, if I wanted to create my own style for a table, I could specify the
+        selectors .dataRow4, .dataCell4, and .headerCell4, and pass in the number 4 as the style argument for my table
+        constructor.
+    </p>
+
+    <p><strong>Header Selector</strong></p>
+    <p class="code">
+        .headerCell4 { <br>
+        &emsp;background-color: rgb(0, 0, 0); <br>
+        &emsp;font-size: 1.75rem; <br>
+        &emsp;border: 1px solid #333; <br>
+        }
+    </p>
+
+    <p><strong>Data-Cell Selector</strong></p>
+    <p class="code">
+        .dataCell4 { <br>
+        &emsp;background-color: rgb(92, 92, 92); <br>
+        &emsp;color: white; <br>
+        &emsp;font-size: 1.25rem; <br>
+
+        &emsp;padding: 3px; <br>
+        &emsp;border: 1px solid #333; <br>
+        }
+    </p>
+
+    <p>Now, to create a table with this new, custom, style, we pass in 4 as the style argument. Note that some rows have
+        been appended to this table to show off its style, and the search feature has been disabled.
+    </p>
+    <p class="code">
+        const myTable = new EasyTable("myTable", "main", ['Model', 'Brand', 'Year'], false, <strong>4</strong>)
+    </p>
+
+    <p><strong>Resulting Table</strong></p>
+    <div id="step5Table"></div>
 
 </body>
 
