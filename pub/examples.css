@@ -1,0 +1,18 @@
+#main {
+    width: 35%;
+    text-align: justify;
+    padding-left: 25px;
+}
+
+.code {
+
+    /* width: 90%; */
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: lightgrey;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 550;
+    line-height: 1.5rem;
+}
