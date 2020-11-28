@@ -1,4 +1,4 @@
-class EasyTable {
+class EasyTable extends HTMLElement {
 
     /**
      * Create a new table with specified name and columns, and append it to to the element
@@ -9,7 +9,9 @@ class EasyTable {
      * @param {Array[String]} columns   Array of strings represting column headers.
      * @param {Boolean} allowSearch     Boolean to enable search functionality on columns.
      */
-    constructor(name, parentId, columns, allowSearch, defaultStyle) {
+    constructor(name, parentId, options) {
+
+        super()
 
         this.table = _createElem('table')
         this.head = _createElem('thead')
@@ -19,37 +21,50 @@ class EasyTable {
         this.table.appendChild(this.head)
         this.table.appendChild(this.body)
 
-        this.columns = [...columns]
+        this.columns = [...options.columns]
         this.colCount = this.columns.length
         this.rowCount = 0
 
-        this.style = defaultStyle
         this.inputs = []
 
         this._setColumns()
 
-        // Optional Arguments
-        allowSearch ? this._addInputFields() : null
+        // Search
+        options.enableSearch ? this._addInputFields() : null
+        // Sorting
 
-        const parentElem = document.querySelector(`#${parentId}`)
-        parentElem.appendChild(this.table)
+        this.shadow = document.querySelector(`#${parentId}`).attachShadow({ mode: 'closed' })
+        this.shadow.appendChild(this.table)
+
+        // Table's style.
+        if (options.stylesheet) {
+            const link = document.createElement('link')
+            link.setAttribute('rel', 'stylesheet')
+            link.setAttribute('href', `${options.stylesheet}`)
+            this.shadow.appendChild(link)
+        } else if (options.cssText) {
+            const style = document.createElement('style')
+            this.shadow.appendChild(style)
+        } else {
+            const style = document.createElement('style')
+            style.textContent = _selectStyle(options.defaultStyle)
+            this.shadow.appendChild(style)
+        }
     }
 
     // Helpers to initialize the table.
     _setColumns = () => {
-
-        console.log("headerCell" + this.style)
 
         const headerRow = _createElem('tr')
         headerRow.style.cssText = "text-align: center"
 
         this.columns.forEach(colHeader => {
             let headerCell = _createElem('td')
-            headerCell.setAttribute("class", "headerCell" + this.style)
+            // headerCell.setAttribute("class", "headerCell" + this.selectedStyle)
+            headerCell.setAttribute("class", "headerCell")
             headerCell.appendChild(_createText(`${colHeader}`))
             headerRow.appendChild(headerCell)
         });
-
         this.head.appendChild(headerRow)
     }
 
@@ -74,10 +89,12 @@ class EasyTable {
             return false
         }
         let newRow = this.body.insertRow(i)
-        newRow.setAttribute("class", "dataRow" + this.style)
+        // newRow.setAttribute("class", "dataRow" + this.selectedStyle)
+        newRow.setAttribute("class", "dataRow")
         for (let j = 0; j < this.colCount; j++) {
             const newCell = _createElem('td')
-            newCell.setAttribute("class", "dataCell" + this.style)
+            // newCell.setAttribute("class", "dataCell" + this.selectedStyle)
+            newCell.setAttribute("class", "dataCell")
             newCell.appendChild(_createText(cells[j]))
             newRow.appendChild(newCell)
         }
@@ -183,10 +200,10 @@ class EasyTable {
 
         for (let i = 0; i < this.colCount; i++) {
             const input = _createElem('input')
-            // input.type = "search"
             input.type = "text"
             input.placeholder = "Search..."
-            input.setAttribute("class", "inputCell" + this.style)
+            // input.setAttribute("class", "inputCell" + this.selectedStyle)
+            input.setAttribute("class", "inputCell")
 
             const cell = _createElem('td')
             cell.appendChild(input)
@@ -251,6 +268,90 @@ class EasyTable {
                 currRow.style.display = "none"
             }
         }
+    }
+}
+
+// Declaring custom element.
+customElements.define('easy-table', EasyTable)
+
+// // Default styles.
+
+const style1 = `
+    .headerCell {
+        background-color: rgb(194, 187, 187);
+        font-size: 1.75rem;
+        border: 1px solid #333;
+    }
+
+    .inputCell {
+        padding: 3px;
+        margin: auto;
+    }
+
+    .dataCell {
+        padding: 3px;
+        background-color: rgb(241, 241, 241);
+        font-size: 1.25rem;
+        border: 1px solid #333;
+    }
+`
+
+const style2 = `
+    .headerCell {
+        background-color: rgb(0, 0, 0);
+        color: white;
+        font-size: 1.75rem;
+        border: 1px solid #333;
+    }
+
+    .inputCell {
+        padding: 3px;
+        margin: auto;
+    }
+
+    .dataCell {
+        background-color: rgb(92, 92, 92);
+        color: white;
+        font-size: 1.25rem;
+
+        padding: 3px;
+        border: 1px solid #333;
+    }
+`
+
+const style3 = `
+    .headerCell {
+        background-color: rgb(91, 126, 223);
+        font-size: 1.75rem;
+        border: 1px solid #333;
+    }
+
+    .inputCell {
+        padding: 3px;
+        margin: auto;
+    }
+
+    .dataCell {
+        padding: 3px;
+        font-size: 1.25rem;
+        border: 1px solid #333;
+    }
+
+    .dataRow:nth-child(even) {
+        background-color: rgb(163, 184, 243);
+    }
+`
+
+_selectStyle = (styleNum) => {
+    switch (styleNum) {
+        case 1:
+            return style1
+        case 2:
+            return style2
+        case 3:
+            return style3
+        default:
+            return style1
     }
 }
 
