@@ -73,6 +73,12 @@ class EasyTable extends HTMLElement {
         this.head.appendChild(headerRow)
     }
 
+    /**
+     * @param {String} header           Header of new col.
+     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
+     * @param {Any} defaultData         Default data to be set in each row of the new col.
+     * @returns {Boolean}               True on success, false on error.
+     */
     appendCol = (header, dataList, defaultData) => {
 
         return this.insertCol(this.colCount, header, dataList, defaultData)
@@ -108,6 +114,7 @@ class EasyTable extends HTMLElement {
 
         // Append search-box for new col.
         if (this.search) {
+
             const input = _createElem('input')
             input.type = "text"
             input.placeholder = header
@@ -115,7 +122,6 @@ class EasyTable extends HTMLElement {
 
             const cell = _createElem('td')
             cell.appendChild(input)
-
             const inputRow = this.head.children[1]
 
             if (i == this.colCount) {
@@ -138,7 +144,6 @@ class EasyTable extends HTMLElement {
             } else if (dataList) {
                 cell.appendChild(_createText(dataList[j]))
             }
-
             if (i == this.colCount) {
                 row.appendChild(cell)
             } else {
@@ -146,6 +151,7 @@ class EasyTable extends HTMLElement {
             }
         }
         this.colCount++
+        return true
     }
 
 
@@ -321,6 +327,7 @@ class EasyTable extends HTMLElement {
         }
     }
 
+    // Search Algo: Hides all rows that don't match queries.
     _search = () => {
 
         this._resetTable(false)
