@@ -7,16 +7,16 @@ class EasyTable extends HTMLElement {
      * @param {String} name             Name of table.
      * @param {String} parentId         Id of parent element in which this table should be appended.
      * @param {Array[String]} columns   Array of strings represting column headers.
-     * @param {Boolean} allowSearch     Boolean to enable search functionality on columns.
+     * @param {Object} options          Object literal containing all constructor options.
      */
     constructor(name, parentId, options) {
 
         super()
 
+        // Underlying HTMLTable* objects.
         this.table = _createElem('table')
         this.head = _createElem('thead')
         this.body = _createElem('tbody')
-
         this.table.setAttribute("name", name)
         this.table.appendChild(this.head)
         this.table.appendChild(this.body)
@@ -24,35 +24,40 @@ class EasyTable extends HTMLElement {
         this.columns = [...options.columns]
         this.colCount = this.columns.length
         this.rowCount = 0
-
         this.inputs = []
-
         this._setColumns()
 
         // Search
-        options.enableSearch ? this._addInputFields() : null
-        // Sorting
+        if (options.enableSearch) {
+            this.search = true
+            this._addInputFields()
+        }
 
+        // Shadow DOM to encapsulate the component.
         this.shadow = document.querySelector(`#${parentId}`).attachShadow({ mode: 'closed' })
         this.shadow.appendChild(this.table)
 
         // Table's style.
         if (options.stylesheet) {
-            const link = document.createElement('link')
+            const link = _createElem('link')
             link.setAttribute('rel', 'stylesheet')
             link.setAttribute('href', `${options.stylesheet}`)
             this.shadow.appendChild(link)
         } else if (options.cssText) {
-            const style = document.createElement('style')
+            const style = _createElem('style')
             this.shadow.appendChild(style)
         } else {
-            const style = document.createElement('style')
+            const style = _createElem('style')
             style.textContent = _selectStyle(options.defaultStyle)
             this.shadow.appendChild(style)
         }
     }
 
-    // Helpers to initialize the table.
+
+    /** Methods for Columns. */
+
+
+    // Helper to initialize column headers.
     _setColumns = () => {
 
         const headerRow = _createElem('tr')
@@ -68,7 +73,84 @@ class EasyTable extends HTMLElement {
         this.head.appendChild(headerRow)
     }
 
+    appendCol = (header, dataList, defaultData) => {
+
+        return this.insertCol(this.colCount, header, dataList, defaultData)
+    }
+
+    /**
+     * @param {Integer} i               Position to insert new col.   
+     * @param {String} header           Header of new col.
+     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
+     * @param {Any} defaultData         Default data to be set in each row of the new col.
+     * @returns {Boolean}               True on success, false on error.
+     */
+    insertCol = (i, header, dataList, defaultData) => {
+
+        if (dataList && dataList.length != this.rowCount) {
+            return false
+        }
+        if (!_valid_index(i, this.colCount + 1)) {
+            return false
+        }
+
+        const headerCell = _createElem('td')
+        headerCell.setAttribute("class", "headerCell")
+        headerCell.appendChild(_createText(header))
+
+        const headerRow = this.head.children[0]
+        console.log(headerRow.children[i])
+        if (i == this.colCount) {
+            headerRow.appendChild(headerCell)
+        } else {
+            headerRow.insertBefore(headerCell, headerRow.children[i])
+        }
+
+        // Append search-box for new col.
+        if (this.search) {
+            const input = _createElem('input')
+            input.type = "text"
+            input.placeholder = header
+            input.setAttribute("class", "inputCell")
+
+            const cell = _createElem('td')
+            cell.appendChild(input)
+
+            const inputRow = this.head.children[1]
+
+            if (i == this.colCount) {
+                inputRow.insertBefore(cell, this.shadow.querySelector('#Search'))
+            } else {
+                inputRow.insertBefore(cell, inputRow.children[i])
+            }
+            this.inputs.push(input)
+        }
+
+        // Appending new data to each row.
+        for (let j = 0; j < this.rowCount; j++) {
+
+            const row = this.body.children[j]
+            const cell = _createElem('td')
+            cell.setAttribute("class", "dataCell")
+
+            if (defaultData != null) {
+                cell.appendChild(_createText(defaultData))
+            } else if (dataList) {
+                cell.appendChild(_createText(dataList[j]))
+            }
+
+            if (i == this.colCount) {
+                row.appendChild(cell)
+            } else {
+                row.insertBefore(cell, row.children[i])
+            }
+        }
+        this.colCount++
+    }
+
+
     /** Methods for Rows (CRUD)*/
+
 
     /**
      * @param {Array} cells     Array of data to be set in new row.
@@ -79,7 +161,7 @@ class EasyTable extends HTMLElement {
     }
 
     /**
-     * @param {Integer} i       
+     * @param {Integer} i       Position to insert new row.
      * @param {Array} cells     Array of data to be set in new row.
      * @returns {Boolean}       True on success, false on error.
      */
@@ -160,7 +242,9 @@ class EasyTable extends HTMLElement {
         return true
     }
 
+
     /** Methods for Cells. */
+
 
     /**
      * @param {Integer} row                     Row of desired cell.
@@ -202,7 +286,6 @@ class EasyTable extends HTMLElement {
             const input = _createElem('input')
             input.type = "text"
             input.placeholder = "Search..."
-            // input.setAttribute("class", "inputCell" + this.selectedStyle)
             input.setAttribute("class", "inputCell")
 
             const cell = _createElem('td')
@@ -212,6 +295,7 @@ class EasyTable extends HTMLElement {
         }
         const createButton = (value, callback, parent) => {
             let button = _createElem('input')
+            button.id = value
             button.type = "submit"
             button.value = value
             button.onclick = callback
@@ -274,7 +358,7 @@ class EasyTable extends HTMLElement {
 // Declaring custom element.
 customElements.define('easy-table', EasyTable)
 
-// // Default styles.
+// Default styles.
 
 const style1 = `
     .headerCell {
