@@ -1,20 +1,61 @@
+/* * {
+    padding: none;
+    margin: none;
+} */
+
+/* Body */
 #main {
-    width: 750px;
-    text-align: justify;
+    width: 60%;
+    margin: auto;
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
+
+    font-size: 1rem;
+    color: rgb(110, 110, 110);
+    text-align: justify;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+
     background-color: whitesmoke;
 }
 
+/* Container for sections/steps. */
+.step {
+    display: flexbox;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: auto;
+
+    padding: 1rem 4rem;
+    margin: 2rem;
+    height: fit-content;
+
+    text-align: justify;
+    background-color: white;
+    box-shadow: 0px 7.5px 10px 0px rgba(138,134,138,1);   
+}
+/* Container for example tables. */
+.step-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+
+    color: black;
+}
+.step, h2 {
+    text-align: left;
+}
+
+/* Container for code snippets. */
 .code {
 
-    /* width: 90%; */
     margin-left: auto;
     margin-right: auto;
+    padding: 1rem;
 
-    background-color: lightgrey;
-    padding: 15px;
+    background-color: rgba(211, 211, 211, 0.486);
+    
     font-family: Consolas,"courier new";
     font-size: 0.9rem;
     font-weight: 550;
