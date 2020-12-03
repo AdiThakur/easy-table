@@ -389,8 +389,8 @@ const style1 = `
 
 const style2 = `
     .headerCell {
-        background-color: rgb(0, 0, 0);
         color: white;
+        background-color: #007c77;
         font-size: 1.75rem;
         border: 1px solid #333;
     }
@@ -401,12 +401,13 @@ const style2 = `
     }
 
     .dataCell {
-        background-color: rgb(92, 92, 92);
-        color: white;
-        font-size: 1.25rem;
-
         padding: 3px;
+        font-size: 1.25rem;
         border: 1px solid #333;
+    }
+
+    .dataRow:nth-child(even) {
+        background-color: #bbb;
     }
 `
 

@@ -6,7 +6,7 @@ const step1 = new EasyTable("step1", "step1Table", {
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: 3,
+    defaultStyle: 2,
     stylesheet: null,
     cssText: null
 })
@@ -16,7 +16,7 @@ const step2 = new EasyTable("step2", "step2Table", {
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: 3,
+    defaultStyle: 2,
     stylesheet: null,
     cssText: null
 })
@@ -34,7 +34,7 @@ const step3 = new EasyTable("step3", "step3Table", {
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: 3,
+    defaultStyle: 2,
     stylesheet: null,
     cssText: null
 })
@@ -54,7 +54,7 @@ const step4 = new EasyTable("step4", "step4Table", {
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: 3,
+    defaultStyle: 2,
     stylesheet: null,
     cssText: null
 })
@@ -73,7 +73,7 @@ step4.popRow()
 const step5 = new EasyTable("step5", "step5Table", {
     columns: ['Model', 'Brand', 'Year'],
     colNumbering: true,
-    enableSearch: false,
+    enableSearch: true,
     enableSort: true,
     defaultStyle: 2,
     stylesheet: null,
