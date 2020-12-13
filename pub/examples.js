@@ -16,8 +16,8 @@ const step2 = new EasyTable("step2", "step2Table", {
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: 2,
-    stylesheet: null,
+    defaultStyle: null,
+    stylesheet: "EasyTable/EasyTable.css",
     cssText: null
 })
 step2.appendRow(["Camry", "Toyota", "2000"])

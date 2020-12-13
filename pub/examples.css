@@ -49,7 +49,7 @@ body {
     color: black;
 }
 .step, h2 {
-    text-align: left;
+    text-align: justify;
 }
 
 /* Navbar */

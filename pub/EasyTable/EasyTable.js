@@ -35,7 +35,6 @@ class EasyTable extends HTMLElement {
 
         // Shadow DOM to encapsulate the component.
         this.shadow = document.querySelector(`#${parentId}`).attachShadow({ mode: 'closed' })
-        this.shadow.appendChild(this.table)
 
         // Table's style.
         if (options.stylesheet) {
@@ -51,6 +50,8 @@ class EasyTable extends HTMLElement {
             style.textContent = _selectStyle(options.defaultStyle)
             this.shadow.appendChild(style)
         }
+
+        this.shadow.appendChild(this.table)
     }
 
 

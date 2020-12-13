@@ -1,0 +1,21 @@
+.headerCell {
+    color: white;
+    background-color: rgb(243, 120, 120);
+    font-size: 1.75rem;
+    border: 1px solid #333;
+}
+
+.inputCell {
+    padding: 3px;
+    margin: auto;
+}
+
+.dataCell {
+    padding: 3px;
+    font-size: 1.25rem;
+    border: 1px solid #333;
+}
+
+.dataRow:nth-child(even) {
+    background-color: rgb(243, 120, 120);
+}
