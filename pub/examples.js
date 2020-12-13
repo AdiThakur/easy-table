@@ -11,13 +11,15 @@ const step1 = new EasyTable("step1", "step1Table", {
     cssText: null
 })
 
+
 const step2 = new EasyTable("step2", "step2Table", {
     columns: ['Model', 'Brand', 'Year'],
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: null,
-    stylesheet: "EasyTable/EasyTable.css",
+    defaultStyle: 2,
+    // stylesheet: "EasyTable/EasyTable.css",
+    stylesheet: null,
     cssText: null
 })
 step2.appendRow(["Camry", "Toyota", "2000"])
@@ -28,6 +30,62 @@ step2.appendRow(["Yaris", "Toyota", "1996"])
 step2.appendRow(["Model-T", "Ford", "1102"])
 step2.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step2.insertRow(1, ["458", "Ferrari", "1996"])
+
+
+const step21 = new EasyTable("step21", "step21Table", {
+    columns: ['Model', 'Brand', 'Year'],
+    colNumbering: true,
+    enableSearch: true,
+    enableSort: true,
+    defaultStyle: 2,
+    // stylesheet: "EasyTable/EasyTable.css",
+    stylesheet: null,
+    cssText: null
+})
+step21.appendRow(["Camry", "Toyota", "2000"])
+step21.appendRow(["Civic", "Honda", "2005"])
+step21.appendRow(["Accord", "Honda", "2001"])
+step21.appendRow(["Gustang", "Ford", "1995"])
+step21.appendRow(["Yaris", "Toyota", "1996"])
+step21.appendRow(["Model-T", "Ford", "1102"])
+step21.insertRow(1, ["Enzo", "Ferrari", "1996"])
+step21.insertRow(1, ["458", "Ferrari", "1996"])
+
+step21.appendCol("Purchases", 0, null)
+
+
+const step22 = new EasyTable("step22", "step22Table", {
+    columns: ['Model', 'Brand', 'Year'],
+    colNumbering: true,
+    enableSearch: true,
+    enableSort: true,
+    defaultStyle: 2,
+    // stylesheet: "EasyTable/EasyTable.css",
+    stylesheet: null,
+    cssText: null
+})
+step22.appendRow(["Camry", "Toyota", "2000"])
+step22.appendRow(["Civic", "Honda", "2005"])
+step22.appendRow(["Accord", "Honda", "2001"])
+step22.appendRow(["Gustang", "Ford", "1995"])
+step22.appendRow(["Yaris", "Toyota", "1996"])
+step22.appendRow(["Model-T", "Ford", "1102"])
+step22.insertRow(1, ["Enzo", "Ferrari", "1996"])
+step22.insertRow(1, ["458", "Ferrari", "1996"])
+
+step22.appendCol("Purchases", 0, null)
+
+step22.insertCol(3, "Ratings", null, [
+    "4/10",
+    "9/10",
+    "10/10",
+    "3/10",
+    "4/10",
+    "7/10",
+    "2/10",
+    "1/10"
+])
+
 
 const step3 = new EasyTable("step3", "step3Table", {
     columns: ['Model', 'Brand', 'Year'],
@@ -48,6 +106,7 @@ step3.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step3.insertRow(1, ["458", "Ferrari", "1996"])
 
 step3.setCell(5, 0, "Mustang")
+
 
 const step4 = new EasyTable("step4", "step4Table", {
     columns: ['Model', 'Brand', 'Year'],
@@ -99,6 +158,3 @@ step5.insertCol(3, "Rating", null, [
     "7/10",
     "8/10"
 ])
-step5.appendCol("Cool Factor", 1, null)
-// console.log("Del row: ", step5.deleteRow(0))
-console.log(step5.setCell(0, 0, "Greetings"))

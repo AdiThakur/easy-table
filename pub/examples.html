@@ -92,9 +92,17 @@
                 Feel free to try it out in the tables below.
             </p>
             <p class="code">
-                const myTable = new EasyTable("myTable", "main", ["Model",
-                "Brand", "Year"], true, 3)
+                const myTable = new EasyTable("myTable", "main", { <br>
+                &emsp;&emsp;&emsp; columns: ['Model', 'Brand', 'Year'], <br>
+                &emsp;&emsp;&emsp; colNumbering: true, <br>
+                &emsp;&emsp;&emsp; enableSearch: true, <br>
+                &emsp;&emsp;&emsp; enableSort: true, <br>
+                &emsp;&emsp;&emsp; defaultStyle: 2, <br>
+                &emsp;&emsp;&emsp; stylesheet: null,<br>
+                &emsp;&emsp;&emsp; cssText: null<br>
+                }
             </p>
+
             <p><strong>Resulting Table</strong></p>
             <div id="step1Table" class="step-table"></div>
         </div>
@@ -102,7 +110,10 @@
 
         <!-- Step 2: Adding data to tables.  -->
         <div class="step">
-            <h2>Adding Some Data</h2>
+
+            <h2>Entering Data</h2>
+
+            <p><strong>Adding Rows</strong></p>
             <p>
                 Adding new data is very simple. EASYTable provides two methods
                 for adding a new row:
@@ -115,6 +126,7 @@
                 length matches the number of columns. Let's add some cars to the
                 table.
             </p>
+
             <p><strong>Appending Some Rows</strong></p>
             <p class="code">
                 myTable.appendRow(["Camry", "Toyota", "2000"]) <br>
@@ -124,13 +136,53 @@
                 myTable.appendRow(["Yaris", "Toyota", "1996"]) <br>
                 myTable.appendRow(["Model-T", "Ford", "1102"]) <br>
             </p>
+
             <p><strong>Inserting a Few More Rows</strong></p>
             <p class="code">
                 myTable.insertRow(1, ["Enzo", "Ferrari", "1996"]) <br>
                 myTable.insertRow(1, ["458", "Ferrari", "1996"]) <br>
             </p>
+
             <p><strong>Resulting Table</strong></p>
             <div id="step2Table" class="step-table"></div>
+
+            <p><strong>Adding Columns</strong></p>
+            <p>
+                But wait, theres more! Unlike most of the other
+                table-manipulation libraries, EASYTable allows you to add entire
+                COLUMNS of data. How cool is that? You can append or insert a
+                new column. Both of these methods require some sort of data as
+                paremeters to populate the new columns of the prexisting rows.
+            </p>
+            <p>
+                In both of these methods, you can either pass in a default-value
+                (a value that is assigned
+                to each of the new cells), or an array of data to populate the
+                cell at the corresponding index.
+            </p>
+
+            <p><strong>Appending a Column</strong></p>
+            <p class="code">
+                myTable.appendCol("Purchases", 0, null) <br>
+            </p>
+            <p><strong>Resulting Table</strong></p>
+            <div id="step21Table" class="step-table"></div>
+
+            <p><strong>Inserting a Column</strong></p>
+            <p class="code">
+                myTable.appendCol("Ratings", null, [
+                "4/10",
+                "9/10",
+                "10/10",
+                "3/10",
+                "4/10",
+                "7/10",
+                "2/10",
+                "1/10"
+                ])) <br>
+            </p>
+            <p><strong>Resulting Table</strong></p>
+            <div id="step22Table" class="step-table"></div>
         </div>
 
 
@@ -162,7 +214,7 @@
             <h3>Removing Data</h3>
             <p>
                 You know what, I no longer want Model-T in our table; its waaaay
-                too old! Once again, as you might have
+                too old! As you might have
                 guessed,
                 EASYTable provides multiple easy approaches to the given
                 problem. We can remove the last row by either

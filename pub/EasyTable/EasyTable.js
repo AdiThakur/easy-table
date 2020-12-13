@@ -295,13 +295,13 @@ class EasyTable extends HTMLElement {
 
         searchBarInput.placeholder = "Search..."
         searchBarInput.setAttribute("type", "search")
-        searchBarInput.style.cssText = "width: 75%; margin: 0px; padding: 0px; box-sizing: border-box;"
+        searchBarInput.style.cssText = "width: 85%; margin: 0px; padding: 0px; box-sizing: border-box;"
 
         // Search button.
         const searchButton = _createElem('button')
         searchCell.appendChild(searchButton)
 
-        searchButton.style.cssText = "width: 25%; margin: 0px; padding: 0px;  box-sizing: border-box;"
+        searchButton.style.cssText = "width: 15%; margin: 0px; padding: 0px;  box-sizing: border-box;"
         searchButton.innerText = "Search"
         searchButton.onclick = this._search
     }
@@ -351,6 +351,7 @@ customElements.define('easy-table', EasyTable)
 
 const style1 = `
     .headerCell {
+        min-width: 100px;
         background-color: rgb(194, 187, 187);
         font-size: 1.75rem;
         border: 1px solid #333;
@@ -372,6 +373,7 @@ const style1 = `
 const style2 = `
     .headerCell {
         color: white;
+        min-width: 100px;
         background-color: #007c77;
         font-size: 1.75rem;
         border: 1px solid #333;
@@ -395,6 +397,7 @@ const style2 = `
 
 const style3 = `
     .headerCell {
+        min-width: 100px;
         background-color: rgb(91, 126, 223);
         font-size: 1.75rem;
         border: 1px solid #333;
