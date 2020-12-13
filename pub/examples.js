@@ -88,3 +88,17 @@ step5.appendRow(["Model-T", "Ford", "1102"])
 step5.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step5.insertRow(1, ["458", "Ferrari", "1996"])
 step5.setCell(5, 0, "Mustang")
+
+step5.insertCol(3, "Rating", null, [
+    "1/10",
+    "2/10",
+    "3/10",
+    "4/10",
+    "5/10",
+    "6/10",
+    "7/10",
+    "8/10"
+])
+step5.appendCol("Cool Factor", 1, null)
+// console.log("Del row: ", step5.deleteRow(0))
+console.log(step5.setCell(0, 0, "Greetings"))

@@ -24,7 +24,7 @@ class EasyTable extends HTMLElement {
         this.columns = [...options.columns]
         this.colCount = this.columns.length
         this.rowCount = 0
-        this.inputs = []
+        this.input = null
         this._setColumns()
 
         // Search
@@ -47,52 +47,64 @@ class EasyTable extends HTMLElement {
             this.shadow.appendChild(style)
         } else {
             const style = _createElem('style')
-            style.textContent = _selectStyle(options.defaultStyle)
+            style.textContent = this._selectStyle(options.defaultStyle)
             this.shadow.appendChild(style)
         }
 
         this.shadow.appendChild(this.table)
     }
 
+    /** Helpers */
+
+    _selectStyle = (styleNum) => {
+        switch (styleNum) {
+            case 1:
+                return style1
+            case 2:
+                return style2
+            case 3:
+                return style3
+            default:
+                return style1
+        }
+    }
 
     /** Methods for Columns. */
 
-
-    // Helper to initialize column headers.
+    // Initalize column headers provided during instantiation.
     _setColumns = () => {
 
         const headerRow = _createElem('tr')
+        this.head.appendChild(headerRow)
         headerRow.style.cssText = "text-align: center"
 
         this.columns.forEach(colHeader => {
             let headerCell = _createElem('td')
-            // headerCell.setAttribute("class", "headerCell" + this.selectedStyle)
             headerCell.setAttribute("class", "headerCell")
             headerCell.appendChild(_createText(`${colHeader}`))
             headerRow.appendChild(headerCell)
         });
-        this.head.appendChild(headerRow)
     }
 
     /**
      * @param {String} header           Header of new col.
-     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
      * @param {Any} defaultData         Default data to be set in each row of the new col.
+     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
      * @returns {Boolean}               True on success, false on error.
      */
-    appendCol = (header, dataList, defaultData) => {
+    appendCol = (header, defaultData, dataList) => {
 
-        return this.insertCol(this.colCount, header, dataList, defaultData)
+        return this.insertCol(this.colCount, header, defaultData, dataList)
     }
 
     /**
      * @param {Integer} i               Position to insert new col.   
      * @param {String} header           Header of new col.
-     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
      * @param {Any} defaultData         Default data to be set in each row of the new col.
+     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
      * @returns {Boolean}               True on success, false on error.
      */
-    insertCol = (i, header, dataList, defaultData) => {
+    insertCol = (i, header, defaultData, dataList) => {
 
         if (dataList && dataList.length != this.rowCount) {
             return false
@@ -100,64 +112,50 @@ class EasyTable extends HTMLElement {
         if (!_valid_index(i, this.colCount + 1)) {
             return false
         }
+        if (!dataList && (defaultData === null)) {
+            return false
+        }
+
+        // Create and insert new header cell.
+        this.columns.push(header)
 
         const headerCell = _createElem('td')
         headerCell.setAttribute("class", "headerCell")
         headerCell.appendChild(_createText(header))
 
         const headerRow = this.head.children[0]
-        console.log(headerRow.children[i])
         if (i == this.colCount) {
             headerRow.appendChild(headerCell)
         } else {
             headerRow.insertBefore(headerCell, headerRow.children[i])
         }
 
-        // Append search-box for new col.
-        if (this.search) {
-
-            const input = _createElem('input')
-            input.type = "text"
-            input.placeholder = header
-            input.setAttribute("class", "inputCell")
-
-            const cell = _createElem('td')
-            cell.appendChild(input)
-            const inputRow = this.head.children[1]
-
-            if (i == this.colCount) {
-                inputRow.insertBefore(cell, this.shadow.querySelector('#Search'))
-            } else {
-                inputRow.insertBefore(cell, inputRow.children[i])
-            }
-            this.inputs.push(input)
-        }
-
-        // Appending new data to each row.
+        // Appending new data to each existing row.
         for (let j = 0; j < this.rowCount; j++) {
 
             const row = this.body.children[j]
             const cell = _createElem('td')
             cell.setAttribute("class", "dataCell")
-
+            // Setting data for new cell.
             if (defaultData != null) {
                 cell.appendChild(_createText(defaultData))
             } else if (dataList) {
                 cell.appendChild(_createText(dataList[j]))
             }
+            // Inserting new data-cell.
             if (i == this.colCount) {
                 row.appendChild(cell)
             } else {
                 row.insertBefore(cell, row.children[i])
             }
         }
-        this.colCount++
+
+        // Making search bar span newly created column.
+        this.input.parentElement.setAttribute("colspan", ++this.colCount)
         return true
     }
 
-
     /** Methods for Rows (CRUD)*/
-
 
     /**
      * @param {Array} cells     Array of data to be set in new row.
@@ -177,12 +175,12 @@ class EasyTable extends HTMLElement {
         if (!_valid_index(i, this.rowCount + 1) || !_valid_cells(cells.length, this.colCount)) {
             return false
         }
+        // Create new row; populate it well cells that contain specified data.
         let newRow = this.body.insertRow(i)
-        // newRow.setAttribute("class", "dataRow" + this.selectedStyle)
         newRow.setAttribute("class", "dataRow")
+
         for (let j = 0; j < this.colCount; j++) {
             const newCell = _createElem('td')
-            // newCell.setAttribute("class", "dataCell" + this.selectedStyle)
             newCell.setAttribute("class", "dataCell")
             newCell.appendChild(_createText(cells[j]))
             newRow.appendChild(newCell)
@@ -216,28 +214,21 @@ class EasyTable extends HTMLElement {
         }
         let row = this.body.children[i]
         for (let j = 0; j < this.colCount; j++) {
-            const element = row.children[j]
-            element.innerHTML = data[j]
+            row.children[j].innerHTML = data[j]
         }
         return true
     }
 
     /**
-     * @returns {HTMLTableRowElement | Null}    Returns the last row element if successful, null
-     *                                          otherwise.
+     * @returns {HTMLTableRowElement | Null}    Returns true if successful, null otherwise.
      */
     popRow = () => {
-
-        let row = { ...this.body.lastChild }
-        if (this.deleteRow(this.rowCount - 1)) {
-            return row
-        }
-        return null
+        return this.deleteRow(this.rowCount - 1)
     }
 
     /**
      * @param {Integer} i                       Index of the row to delete.
-     * @returns {HTMLTableRowElement | Null}    Returns true if successful, false on error.
+     * @returns {HTMLTableRowElement | Null}    Returns true if successful, null otherwise.
      */
     deleteRow = (i) => {
 
@@ -277,86 +268,76 @@ class EasyTable extends HTMLElement {
         if (!_valid_index(row, this.rowCount) || !_valid_index(col, this.colCount)) {
             return false
         }
-        this.body.children[row].children[col].innerHTML = data
+        this.getCell(row, col).innerText = data
         return true
     }
 
+
     /** Search Functionality Helpers.*/
 
-    // Populate input fields for search functionality.
+
+    // Creates the search bar and button.
     _addInputFields = () => {
 
-        const row = _createElem('tr')
-        this.head.appendChild(row)
+        const searchRow = _createElem('tr')
+        this.head.appendChild(searchRow)
 
-        for (let i = 0; i < this.colCount; i++) {
-            const input = _createElem('input')
-            input.type = "text"
-            input.placeholder = "Search..."
-            input.setAttribute("class", "inputCell")
+        // Cell that spans all columns; houses search bar.
+        const searchCell = _createElem('td')
+        searchRow.appendChild(searchCell)
+        searchCell.setAttribute("colspan", this.colCount)
 
-            const cell = _createElem('td')
-            cell.appendChild(input)
-            row.appendChild(cell)
-            this.inputs.push(input)
-        }
-        const createButton = (value, callback, parent) => {
-            let button = _createElem('input')
-            button.id = value
-            button.type = "submit"
-            button.value = value
-            button.onclick = callback
-            parent.appendChild(button)
-        }
-        createButton("Search", this._search, row)
-        createButton("Clear", this._resetTable, row)
+        // Search bar.
+        const searchBarInput = _createElem('input')
+        searchCell.appendChild(searchBarInput)
+        this.input = searchBarInput
+        searchBarInput.addEventListener("search", this._resetTable)
+
+        searchBarInput.placeholder = "Search..."
+        searchBarInput.setAttribute("type", "search")
+        searchBarInput.style.cssText = "width: 75%; margin: 0px; padding: 0px; box-sizing: border-box;"
+
+        // Search button.
+        const searchButton = _createElem('button')
+        searchCell.appendChild(searchButton)
+
+        searchButton.style.cssText = "width: 25%; margin: 0px; padding: 0px;  box-sizing: border-box;"
+        searchButton.innerText = "Search"
+        searchButton.onclick = this._search
     }
 
     // Reset table to initial state.
-    _resetTable = (clearInput) => {
-
+    _resetTable = (e) => {
         // Show all rows.
         for (let i = 0; i < this.rowCount; i++) {
-            const currRow = this.body.children[i]
-            currRow.style.display = ""
-        }
-        // Clear inputs.
-        if (clearInput) {
-            this.inputs.forEach(input => {
-                input.value = ""
-            });
+            this.body.children[i].style.display = ""
         }
     }
 
-    // Search Algo: Hides all rows that don't match queries.
+    // Search algo; Displayed rows contain one or more cells that matches the search query.
     _search = () => {
 
-        this._resetTable(false)
+        this._resetTable()
 
         const inputRow = this.head.lastChild
-        const queries = []
+        const query = this.input.value.toUpperCase()
 
-        // Grab search queries.
-        for (let i = 0; i < this.colCount; i++) {
-            queries.push(inputRow.children[i].lastChild.value)
+        if (!query) {
+            return
         }
-        const desiredMatches = queries.filter(word => {
-            if (word) {
-                return true
-            }
-        }).length
 
-        // Identify rows that match ALL queries.
+        // Identify rows that match query.
         for (let i = 0; i < this.rowCount; i++) {
             const currRow = this.body.children[i]
             let currRowMatches = 0
+            // If any cell matches query; display row.
             for (let j = 0; j < this.colCount; j++) {
                 const currCell = currRow.children[j]
-                if (queries[j].includes(currCell.innerText)) {
+                if (currCell.innerText.toUpperCase().includes(query)) {
                     currRowMatches++
                 }
             }
-            if (currRowMatches != desiredMatches) {
+            if (!currRowMatches) {
                 currRow.style.display = "none"
             }
         }
@@ -366,7 +347,7 @@ class EasyTable extends HTMLElement {
 // Declaring custom element.
 customElements.define('easy-table', EasyTable)
 
-// Default styles.
+/** Default Styles. */
 
 const style1 = `
     .headerCell {
@@ -435,20 +416,8 @@ const style3 = `
     }
 `
 
-_selectStyle = (styleNum) => {
-    switch (styleNum) {
-        case 1:
-            return style1
-        case 2:
-            return style2
-        case 3:
-            return style3
-        default:
-            return style1
-    }
-}
-
 /** Wrappers to minimize line length and line wrapping. */
+
 
 _createElem = (elemString) => {
     return document.createElement(elemString)
