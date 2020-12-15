@@ -15,11 +15,14 @@ class EasyTable extends HTMLElement {
 
         // Underlying HTMLTable* objects.
         this.table = _createElem('table')
-        this.head = _createElem('thead')
+        this.header = _createElem('thead')
         this.body = _createElem('tbody')
+        this.footer = _createElem('tfoot')
+
         this.table.setAttribute("name", name)
-        this.table.appendChild(this.head)
+        this.table.appendChild(this.header)
         this.table.appendChild(this.body)
+        this.table.appendChild(this.footer)
 
         this.columns = [...options.columns]
         this.colCount = this.columns.length
@@ -27,16 +30,17 @@ class EasyTable extends HTMLElement {
         this.input = null
         this._setColumns()
 
-        // Search
+        // Shadow DOM to encapsulate the table's CSS.
+        this.shadow = document.querySelector(`#${parentId}`).attachShadow({ mode: 'closed' })
+        this.shadow.appendChild(this.table)
+
+        // Initialize search functionality.
         if (options.enableSearch) {
             this.search = true
             this._addInputFields()
         }
 
-        // Shadow DOM to encapsulate the component.
-        this.shadow = document.querySelector(`#${parentId}`).attachShadow({ mode: 'closed' })
-
-        // Table's style.
+        // Set-up table's style.
         if (options.stylesheet) {
             const link = _createElem('link')
             link.setAttribute('rel', 'stylesheet')
@@ -51,7 +55,12 @@ class EasyTable extends HTMLElement {
             this.shadow.appendChild(style)
         }
 
-        this.shadow.appendChild(this.table)
+        // Initialize pagination.
+        if (options.paginate) {
+            this.rowsPerPage = options.paginate
+            this.currPage = 0
+            this._addPaginationFields()
+        }
     }
 
     /** Helpers */
@@ -69,13 +78,75 @@ class EasyTable extends HTMLElement {
         }
     }
 
+    _prevPage = () => {
+        this.currPage -= 1
+        if (this.currPage < 0) {
+            this.currPage = Math.ceil(this.rowCount / this.rowsPerPage) - 1
+        }
+        this._paginate()
+    }
+
+    _nextPage = () => {
+        this.currPage += 1
+        if (this.currPage >= Math.ceil(this.rowCount / this.rowsPerPage)) {
+            this.currPage = 0
+        }
+        this._paginate()
+    }
+
+    _paginate = () => {
+
+        this.pageNumberDisplay.innerText = this.currPage
+
+        const firstRowIndex = this.currPage * this.rowsPerPage
+        const lastRowIndex = (this.currPage * this.rowsPerPage) + this.rowsPerPage - 1
+
+        for (let i = 0; i < this.rowCount; i++) {
+            // Hide off-page rows.
+            if (i < firstRowIndex || i > lastRowIndex) {
+                this.body.children[i].style.display = "none"
+            } else {
+                this.body.children[i].style.display = ""
+            }
+        }
+    }
+
+    _addPaginationFields = () => {
+
+        // Houses the prev and next buttons, and the page number.
+        const cell = _createElem('td')
+        this.footer.appendChild(cell)
+        cell.setAttribute("colspan", this.colCount)
+
+        const paginationTray = _createElem('div')
+        cell.appendChild(paginationTray)
+        paginationTray.style.cssText = "width: fit-content; margin: auto; padding: 5px;"
+
+        const prevButton = _createElem('button')
+        paginationTray.appendChild(prevButton)
+        prevButton.innerText = "Prev"
+        prevButton.onclick = this._prevPage
+
+        const pageNumberDisplay = _createElem("span")
+        paginationTray.appendChild(pageNumberDisplay)
+        pageNumberDisplay.style.cssText = "padding: 0px 10px;"
+        pageNumberDisplay.innerText = "0"
+        // Store reference to update later.
+        this.pageNumberDisplay = pageNumberDisplay
+
+        const nextButton = _createElem('button')
+        paginationTray.appendChild(nextButton)
+        nextButton.innerText = "Next"
+        nextButton.onclick = this._nextPage
+    }
+
     /** Methods for Columns. */
 
     // Initalize column headers provided during instantiation.
     _setColumns = () => {
 
         const headerRow = _createElem('tr')
-        this.head.appendChild(headerRow)
+        this.header.appendChild(headerRow)
         headerRow.style.cssText = "text-align: center"
 
         this.columns.forEach(colHeader => {
@@ -123,7 +194,7 @@ class EasyTable extends HTMLElement {
         headerCell.setAttribute("class", "headerCell")
         headerCell.appendChild(_createText(header))
 
-        const headerRow = this.head.children[0]
+        const headerRow = this.header.children[0]
         if (i == this.colCount) {
             headerRow.appendChild(headerCell)
         } else {
@@ -150,8 +221,11 @@ class EasyTable extends HTMLElement {
             }
         }
 
-        // Making search bar span newly created column.
-        this.input.parentElement.setAttribute("colspan", ++this.colCount)
+        // Making search bar span the newly created column.
+        if (this.search) this.input.parentElement.setAttribute("colspan", ++this.colCount)
+        // Making the pagination tray span the newly created column.
+        if (this.rowsPerPage) this.footer.children[0].setAttribute("colspan", ++this.colCount)
+
         return true
     }
 
@@ -186,6 +260,8 @@ class EasyTable extends HTMLElement {
             newRow.appendChild(newCell)
         }
         this.rowCount++
+        // Ensure that only on-page rows are displayed.
+        if (this.rowsPerPage) this._paginate()
         return true
     }
 
@@ -237,6 +313,8 @@ class EasyTable extends HTMLElement {
         }
         this.body.deleteRow(i)
         this.rowCount--
+        // Ensure that only on-page rows are displayed.
+        if (this.rowsPerPage) this._paginate()
         return true
     }
 
@@ -280,7 +358,7 @@ class EasyTable extends HTMLElement {
     _addInputFields = () => {
 
         const searchRow = _createElem('tr')
-        this.head.appendChild(searchRow)
+        this.header.appendChild(searchRow)
 
         // Cell that spans all columns; houses search bar.
         const searchCell = _createElem('td')
@@ -319,7 +397,7 @@ class EasyTable extends HTMLElement {
 
         this._resetTable()
 
-        const inputRow = this.head.lastChild
+        const inputRow = this.header.lastChild
         const query = this.input.value.toUpperCase()
 
         if (!query) {
