@@ -486,16 +486,10 @@ class EasyTable {
     // Search algo; Displayed rows contain one or more cells that matches the search query.
     _search = () => {
 
-        this._resetTable()
-
         const query = this.input.value.toUpperCase()
         if (!query) return
 
-        for (let i = 0; i < this.rowCount; i++) {
-            this.body.children[i].style.display = ""
-        }
-
-
+        this._resetTable()
 
         // Identify rows that match query.
         for (let i = 0; i < this.rowCount; i++) {

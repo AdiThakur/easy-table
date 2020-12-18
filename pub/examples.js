@@ -149,6 +149,10 @@ step5.appendRow(["Model-T", "Ford", "1102"])
 step5.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step5.insertRow(1, ["458", "Ferrari", "1996"])
 step5.setCell(5, 0, "Mustang")
+step5.appendRow(["Model-A", "Ford", "1996"])
+step5.appendRow(["Model-B", "Ford", "1996"])
+step5.appendRow(["Model-C", "Ford", "1996"])
+step5.appendRow(["Model-D", "Ford", "1996"])
 
 step5.insertCol(3, "Rating", null, [
     "0.1",
@@ -160,3 +164,21 @@ step5.insertCol(3, "Rating", null, [
     "0.5",
     "0.2"
 ])
+
+//TODO: 
+
+// FIXES
+
+// 1. Fix styling for headers and shit.
+// 2. Factor out code to create col headers (insertCol appends a text node, while setColumns creates a text node within a DIV)
+// 3. Encapsulate the results of search so that paginate and sort work JUST for the results, and not entire table (maybe create a new tbody, populate with search results, and replace the current table.body with the new tbody elem.)
+
+// 4. Grant users access to _search, _sort, and _next/_prevPage functions (Give them an option to use the default elements, or use their own custom elements, with the provided functions set as callbacks)
+
+// 5. Package code like mark showed in circle generator example.
+
+// Features
+
+// 1. Load from CSV/JSON
+// 2. Save to CSV/JSON
+// 3. 
