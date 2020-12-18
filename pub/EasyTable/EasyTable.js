@@ -24,7 +24,6 @@ class EasyTable {
 
         this.columns = [...options.columns]
         this.colCount = this.columns.length
-        this.rowCount = 0
         this.input = null
         this._setColumns()
 
@@ -134,8 +133,8 @@ class EasyTable {
             elem1.parentNode.insertBefore(elem2, elem1)
         }
         // Good ole bubble-sort.
-        for (let i = 0; i < this.rowCount; i++) {
-            for (let j = 0; j < this.rowCount - i - 1; j++) {
+        for (let i = 0; i < this.body.childElementCount; i++) {
+            for (let j = 0; j < this.body.childElementCount - i - 1; j++) {
 
                 const currCell = this.body.children[j].children[col].innerText.toLowerCase()
                 const nextCell = this.body.children[j + 1].children[col].innerText.toLowerCase()
@@ -163,7 +162,7 @@ class EasyTable {
     _prevPage = () => {
         this.currPage -= 1
         if (this.currPage < 1) {
-            this.currPage = Math.ceil(this.rowCount / this.rowsPerPage)
+            this.currPage = Math.ceil(this.body.childElementCount / this.rowsPerPage)
         }
         this._paginate()
     }
@@ -171,7 +170,7 @@ class EasyTable {
     // Callback for next page button.
     _nextPage = () => {
         this.currPage += 1
-        if (this.currPage > Math.ceil(this.rowCount / this.rowsPerPage)) {
+        if (this.currPage > Math.ceil(this.body.childElementCount / this.rowsPerPage)) {
             this.currPage = 1
         }
         this._paginate()
@@ -184,13 +183,17 @@ class EasyTable {
 
         const firstRowIndex = (this.currPage - 1) * this.rowsPerPage
         const lastRowIndex = firstRowIndex + this.rowsPerPage - 1
+        const rowCount = Math.min(this.body.childElementCount, this.body.childElementCount)
 
-        this._resetTable()
+        console.log(`Row Count: ${rowCount}`)
+        console.log(`First: ${firstRowIndex} Last: ${lastRowIndex}`)
 
-        for (let i = 0; i < this.rowCount; i++) {
+        for (let i = 0; i < rowCount; i++) {
             // Hide off-page rows.
             if (i < firstRowIndex || i > lastRowIndex) {
                 this.body.children[i].style.display = "none"
+            } else {
+                this.body.children[i].style.display = ""
             }
         }
     }
@@ -266,7 +269,7 @@ class EasyTable {
      */
     insertCol = (i, header, defaultData, dataList) => {
 
-        if (dataList && dataList.length != this.rowCount) {
+        if (dataList && dataList.length != this.body.childElementCount) {
             return false
         }
         if (!_valid_index(i, this.colCount + 1)) {
@@ -291,7 +294,7 @@ class EasyTable {
         }
 
         // Appending new data to each existing row.
-        for (let j = 0; j < this.rowCount; j++) {
+        for (let j = 0; j < this.body.childElementCount; j++) {
 
             const row = this.body.children[j]
             const cell = _createElem('td')
@@ -329,7 +332,7 @@ class EasyTable {
      * @returns {Boolean}       True on success, false on error.
      */
     appendRow = (cells) => {
-        return this.insertRow(this.rowCount, cells)
+        return this.insertRow(this.body.childElementCount, cells)
     }
 
     /**
@@ -339,7 +342,7 @@ class EasyTable {
      */
     insertRow = (i, cells) => {
 
-        if (!_valid_index(i, this.rowCount + 1) || !_valid_cells(cells.length, this.colCount)) {
+        if (!_valid_index(i, this.body.childElementCount + 1) || !_valid_cells(cells.length, this.colCount)) {
             return false
         }
         // Create new row; populate it well cells that contain specified data.
@@ -352,7 +355,6 @@ class EasyTable {
             newCell.appendChild(_createText(cells[j]))
             newRow.appendChild(newCell)
         }
-        this.rowCount++
         // Ensure that only on-page rows are displayed.
         if (this.paginateEnabled) this._paginate()
 
@@ -366,7 +368,7 @@ class EasyTable {
      */
     getRow = (i) => {
 
-        if (!_valid_index(i, this.rowCount)) {
+        if (!_valid_index(i, this.body.childElementCount)) {
             return null
         }
         return this.body.children[i]
@@ -379,7 +381,7 @@ class EasyTable {
      */
     setRow = (i, data) => {
 
-        if (!_valid_index(i, this.rowCount) || !_valid_cells(data.length, this.colCount)) {
+        if (!_valid_index(i, this.body.childElementCount) || !_valid_cells(data.length, this.colCount)) {
             return false
         }
         let row = this.body.children[i]
@@ -393,7 +395,7 @@ class EasyTable {
      * @returns {HTMLTableRowElement | Null}    Returns true if successful, null otherwise.
      */
     popRow = () => {
-        return this.deleteRow(this.rowCount - 1)
+        return this.deleteRow(this.body.childElementCount - 1)
     }
 
     /**
@@ -402,11 +404,10 @@ class EasyTable {
      */
     deleteRow = (i) => {
 
-        if (!_valid_index(i, this.rowCount)) {
+        if (!_valid_index(i, this.body.childElementCount)) {
             return false
         }
         this.body.deleteRow(i)
-        this.rowCount--
         // Ensure that only on-page rows are displayed.
         if (this.paginateEnabled) this._paginate()
 
@@ -423,7 +424,7 @@ class EasyTable {
      */
     getCell = (row, col) => {
 
-        if (!_valid_index(row, this.rowCount) || !_valid_index(col, this.colCount)) {
+        if (!_valid_index(row, this.body.childElementCount) || !_valid_index(col, this.colCount)) {
             return null
         }
         return this.body.children[row].children[col]
@@ -436,7 +437,7 @@ class EasyTable {
      */
     setCell = (row, col, data) => {
 
-        if (!_valid_index(row, this.rowCount) || !_valid_index(col, this.colCount)) {
+        if (!_valid_index(row, this.body.childElementCount) || !_valid_index(col, this.colCount)) {
             return false
         }
         this.getCell(row, col).innerText = data
@@ -477,9 +478,16 @@ class EasyTable {
 
     // Reset table to initial state.
     _resetTable = (e) => {
-        // Show all rows.
-        for (let i = 0; i < this.rowCount; i++) {
-            this.body.children[i].style.display = ""
+
+        // Reset table to show all of the original rows.
+        if (this.originalBody) {
+            this.body.remove()
+            this.body = this.originalBody
+            this.table.appendChild(this.body)
+        }
+        if (this.paginateEnabled) {
+            this.currPage = 1
+            this._paginate()
         }
     }
 
@@ -489,25 +497,37 @@ class EasyTable {
         const query = this.input.value.toUpperCase()
         if (!query) return
 
+        // Restore the table before modifying it to show results.
         this._resetTable()
 
+        // New tbody to store the results.
+        const newBody = _createElem('tbody')
+
         // Identify rows that match query.
-        for (let i = 0; i < this.rowCount; i++) {
+        for (let i = 0; i < this.body.childElementCount; i++) {
             const currRow = this.body.children[i]
             let currRowMatches = 0
             // If any cell matches query; display row.
             for (let j = 0; j < this.colCount; j++) {
-                console.log(`Row: ${i} Col: ${j}`)
                 const currCell = currRow.children[j]
                 if (currCell.innerText.toUpperCase().includes(query)) {
                     currRowMatches++
                 }
             }
-            if (!currRowMatches) {
-                currRow.style.display = "none"
+            if (currRowMatches) {
+                newBody.appendChild(currRow.cloneNode(true))
             }
         }
-        //if (this.paginateEnabled) this._paginate()
+        // Original rows saved for later.
+        this.originalBody = this.body.cloneNode(true)
+        this.body.remove()
+
+        // Display only the rows that match the query.
+        this.table.appendChild(newBody)
+        this.body = newBody
+
+        // Paginate the results.
+        if (this.paginateEnabled) this._paginate()
     }
 }
 

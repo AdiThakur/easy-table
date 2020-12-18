@@ -73,9 +73,20 @@ step22.appendRow(["Model-T", "Ford", "1102"])
 step22.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step22.insertRow(1, ["458", "Ferrari", "1996"])
 
-step22.appendCol("Purchases", 0, null)
 
-step22.insertCol(3, "Ratings", null, [
+
+// step22.insertCol(3, "Ratings", null, [
+//     "4/10",
+//     "9/10",
+//     "10/10",
+//     "3/10",
+//     "4/10",
+//     "7/10",
+//     "2/10",
+//     "1/10"
+// ])
+
+step22.appendCol("Purchases", null, [
     "4/10",
     "9/10",
     "10/10",
@@ -85,6 +96,8 @@ step22.insertCol(3, "Ratings", null, [
     "2/10",
     "1/10"
 ])
+
+step22.appendCol("Ratings", "Purchasessssssssssssssssssssss", null)
 
 
 const step3 = new EasyTable("step3", "step3Table", {
