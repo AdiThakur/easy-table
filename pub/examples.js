@@ -134,9 +134,11 @@ const step5 = new EasyTable("step5", "step5Table", {
     colNumbering: true,
     enableSearch: true,
     enableSort: true,
-    defaultStyle: 2,
-    stylesheet: null,
-    cssText: null
+    // defaultStyle: 2,
+    stylesheet: "EasyTable/EasyTable.css",
+    cssText: null,
+    sort: true,
+    paginate: 4
 })
 step5.appendRow(["Camry", "Toyota", "2000"])
 step5.appendRow(["Civic", "Honda", "2005"])
@@ -144,17 +146,21 @@ step5.appendRow(["Accord", "Honda", "2001"])
 step5.appendRow(["Gustang", "Ford", "1995"])
 step5.appendRow(["Yaris", "Toyota", "1996"])
 step5.appendRow(["Model-T", "Ford", "1102"])
+step5.appendRow(["Model-A", "Ford", "1996"])
+step5.appendRow(["Model-B", "Ford", "1996"])
+step5.appendRow(["Model-C", "Ford", "1996"])
+step5.appendRow(["Model-D", "Ford", "1996"])
 step5.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step5.insertRow(1, ["458", "Ferrari", "1996"])
 step5.setCell(5, 0, "Mustang")
 
 step5.insertCol(3, "Rating", null, [
-    "1/10",
-    "2/10",
-    "3/10",
-    "4/10",
-    "5/10",
-    "6/10",
-    "7/10",
-    "8/10"
+    "0.1",
+    "0.2",
+    "0.4",
+    "0.3",
+    "0.7",
+    "0.5",
+    "0.5",
+    "0.2"
 ])

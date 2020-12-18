@@ -1,4 +1,4 @@
-class EasyTable extends HTMLElement {
+class EasyTable {
 
     /**
      * Create a new table with specified name and columns, and append it to to the element
@@ -10,8 +10,6 @@ class EasyTable extends HTMLElement {
      * @param {Object} options          Object literal containing all constructor options.
      */
     constructor(name, parentId, options) {
-
-        super()
 
         // Underlying HTMLTable* objects.
         this.table = _createElem('table')
@@ -36,7 +34,7 @@ class EasyTable extends HTMLElement {
 
         // Initialize search functionality.
         if (options.enableSearch) {
-            this.search = true
+            this.searchEnabled = true
             this._addInputFields()
         }
 
@@ -57,13 +55,20 @@ class EasyTable extends HTMLElement {
 
         // Initialize pagination.
         if (options.paginate) {
+            this.paginateEnabled = true
             this.rowsPerPage = options.paginate
-            this.currPage = 0
+            this.currPage = 1
             this._addPaginationFields()
+        }
+
+        // Initialize sorting.
+        if (options.sort) {
+            this.sortEnabled = true
+            this._initializeSort()
         }
     }
 
-    /** Helpers */
+    /** General Helpers. */
 
     _selectStyle = (styleNum) => {
         switch (styleNum) {
@@ -78,39 +83,121 @@ class EasyTable extends HTMLElement {
         }
     }
 
+    /** Sorting Functionality. */
+
+    // Set-up sorting buttons for column headers at instantiation.
+    _initializeSort = () => {
+        const headerCells = Array.from(this.header.children[0].children)
+        headerCells.forEach(header => {
+            this._addSortButtons(header)
+        })
+    }
+
+    // Add sorting buttons to given cell.
+    _addSortButtons = (newHeaderCell) => {
+
+        const container = _createElem('div')
+        newHeaderCell.appendChild(container)
+
+        const createSortButton = (direction) => {
+            const sortButton = _createElem('button')
+            container.appendChild(sortButton)
+            sortButton.setAttribute("class", "sortButton")
+            sortButton.style.cssText = "display: block; margin: 0px;"
+            sortButton.innerText = direction == 1 ? "ASC" : "DSC"
+            sortButton.onclick = direction == 1 ? this._sortAscending : this._sortDescending
+        }
+
+        createSortButton(1)
+        createSortButton(-1)
+    }
+
+    // Callback for ascending sort button.
+    _sortAscending = (event) => {
+        this._sort(event, 1)
+    }
+
+    // Callback for descending sort button.
+    _sortDescending = (event) => {
+        this._sort(event, -1)
+    }
+
+    // Simple sorting algorithm.
+    _sort = (event, direction) => {
+
+        // Find index of col to be sorted.
+        const header = event.target.parentElement.parentElement.innerText.split("\n")[0]
+        const col = this.columns.indexOf(header)
+
+        const swap = (elem1, elem2) => {
+            elem1.parentNode.insertBefore(elem2, elem1)
+        }
+        // Good ole bubble-sort.
+        for (let i = 0; i < this.rowCount; i++) {
+            for (let j = 0; j < this.rowCount - i - 1; j++) {
+
+                const currCell = this.body.children[j].children[col].innerText.toLowerCase()
+                const nextCell = this.body.children[j + 1].children[col].innerText.toLowerCase()
+
+                if (direction == 1) {
+                    if (currCell > nextCell) {
+                        swap(this.body.children[j], this.body.children[j + 1])
+                    }
+                } else if (direction == -1) {
+                    if (currCell < nextCell) {
+                        swap(this.body.children[j], this.body.children[j + 1])
+                    }
+                }
+            }
+        }
+        // Pagiante the sorted rows.
+        if (this.paginateEnabled) {
+            this._paginate()
+        }
+    }
+
+    /** Pagination Functionality and Helpers */
+
+    // Callback for previous page button.
     _prevPage = () => {
         this.currPage -= 1
-        if (this.currPage < 0) {
-            this.currPage = Math.ceil(this.rowCount / this.rowsPerPage) - 1
+        if (this.currPage < 1) {
+            this.currPage = Math.ceil(this.rowCount / this.rowsPerPage)
         }
         this._paginate()
     }
 
+    // Callback for next page button.
     _nextPage = () => {
         this.currPage += 1
-        if (this.currPage >= Math.ceil(this.rowCount / this.rowsPerPage)) {
-            this.currPage = 0
+        if (this.currPage > Math.ceil(this.rowCount / this.rowsPerPage)) {
+            this.currPage = 1
         }
         this._paginate()
     }
 
+    // Split the displayed table into set of pages.
     _paginate = () => {
 
         this.pageNumberDisplay.innerText = this.currPage
 
-        const firstRowIndex = this.currPage * this.rowsPerPage
-        const lastRowIndex = (this.currPage * this.rowsPerPage) + this.rowsPerPage - 1
+        const firstRowIndex = (this.currPage - 1) * this.rowsPerPage
+        const lastRowIndex = firstRowIndex + this.rowsPerPage - 1
+
+        this._resetTable()
 
         for (let i = 0; i < this.rowCount; i++) {
             // Hide off-page rows.
             if (i < firstRowIndex || i > lastRowIndex) {
                 this.body.children[i].style.display = "none"
-            } else {
-                this.body.children[i].style.display = ""
             }
+            //  else {
+            //     this.body.children[i].style.display = ""
+            // }
         }
     }
 
+    // Add buttons to navigate the pages of the table.
     _addPaginationFields = () => {
 
         // Houses the prev and next buttons, and the page number.
@@ -188,7 +275,7 @@ class EasyTable extends HTMLElement {
         }
 
         // Create and insert new header cell.
-        this.columns.push(header)
+        this.columns.splice(i, 0, header)
 
         const headerCell = _createElem('td')
         headerCell.setAttribute("class", "headerCell")
@@ -221,10 +308,14 @@ class EasyTable extends HTMLElement {
             }
         }
 
-        // Making search bar span the newly created column.
-        if (this.search) this.input.parentElement.setAttribute("colspan", ++this.colCount)
-        // Making the pagination tray span the newly created column.
-        if (this.rowsPerPage) this.footer.children[0].setAttribute("colspan", ++this.colCount)
+        this.colCount++
+
+        // Add sort buttons for new column.
+        if (this.sortEnabled) this._addSortButtons(headerCell)
+        // Making search bar span the new column.
+        if (this.searchEnabled) this.input.parentElement.setAttribute("colspan", this.colCount)
+        // Making the pagination tray span the new column.
+        if (this.paginateEnabled) this.footer.children[0].setAttribute("colspan", this.colCount)
 
         return true
     }
@@ -261,7 +352,8 @@ class EasyTable extends HTMLElement {
         }
         this.rowCount++
         // Ensure that only on-page rows are displayed.
-        if (this.rowsPerPage) this._paginate()
+        if (this.paginateEnabled) this._paginate()
+
         return true
     }
 
@@ -314,13 +406,12 @@ class EasyTable extends HTMLElement {
         this.body.deleteRow(i)
         this.rowCount--
         // Ensure that only on-page rows are displayed.
-        if (this.rowsPerPage) this._paginate()
+        if (this.paginateEnabled) this._paginate()
+
         return true
     }
 
-
     /** Methods for Cells. */
-
 
     /**
      * @param {Integer} row                     Row of desired cell.
@@ -350,9 +441,7 @@ class EasyTable extends HTMLElement {
         return true
     }
 
-
-    /** Search Functionality Helpers.*/
-
+    /** Search Functionality.*/
 
     // Creates the search bar and button.
     _addInputFields = () => {
@@ -397,12 +486,14 @@ class EasyTable extends HTMLElement {
 
         this._resetTable()
 
-        const inputRow = this.header.lastChild
         const query = this.input.value.toUpperCase()
+        if (!query) return
 
-        if (!query) {
-            return
+        for (let i = 0; i < this.rowCount; i++) {
+            this.body.children[i].style.display = ""
         }
+
+
 
         // Identify rows that match query.
         for (let i = 0; i < this.rowCount; i++) {
@@ -410,6 +501,7 @@ class EasyTable extends HTMLElement {
             let currRowMatches = 0
             // If any cell matches query; display row.
             for (let j = 0; j < this.colCount; j++) {
+                console.log(`Row: ${i} Col: ${j}`)
                 const currCell = currRow.children[j]
                 if (currCell.innerText.toUpperCase().includes(query)) {
                     currRowMatches++
@@ -419,17 +511,16 @@ class EasyTable extends HTMLElement {
                 currRow.style.display = "none"
             }
         }
+        //if (this.paginateEnabled) this._paginate()
     }
 }
-
-// Declaring custom element.
-customElements.define('easy-table', EasyTable)
 
 /** Default Styles. */
 
 const style1 = `
     .headerCell {
         min-width: 100px;
+        text-align: center;
         background-color: rgb(194, 187, 187);
         font-size: 1.75rem;
         border: 1px solid #333;
@@ -498,7 +589,6 @@ const style3 = `
 `
 
 /** Wrappers to minimize line length and line wrapping. */
-
 
 _createElem = (elemString) => {
     return document.createElement(elemString)
