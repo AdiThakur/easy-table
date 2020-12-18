@@ -89,7 +89,7 @@ class EasyTable {
     _initializeSort = () => {
         const headerCells = Array.from(this.header.children[0].children)
         headerCells.forEach(header => {
-            this._addSortButtons(header)
+            this._addSortButtons(header.children[0])
         })
     }
 
@@ -98,12 +98,13 @@ class EasyTable {
 
         const container = _createElem('div')
         newHeaderCell.appendChild(container)
+        container.style.cssText = "margin-left: 5px;"
 
         const createSortButton = (direction) => {
             const sortButton = _createElem('button')
             container.appendChild(sortButton)
             sortButton.setAttribute("class", "sortButton")
-            sortButton.style.cssText = "display: block; margin: 0px;"
+            sortButton.style.cssText = "display: block; margin: 0px; width: 45px; font-size: 12px"
             sortButton.innerText = direction == 1 ? "ASC" : "DSC"
             sortButton.onclick = direction == 1 ? this._sortAscending : this._sortDescending
         }
@@ -191,9 +192,6 @@ class EasyTable {
             if (i < firstRowIndex || i > lastRowIndex) {
                 this.body.children[i].style.display = "none"
             }
-            //  else {
-            //     this.body.children[i].style.display = ""
-            // }
         }
     }
 
@@ -237,10 +235,14 @@ class EasyTable {
         headerRow.style.cssText = "text-align: center"
 
         this.columns.forEach(colHeader => {
-            let headerCell = _createElem('td')
-            headerCell.setAttribute("class", "headerCell")
-            headerCell.appendChild(_createText(`${colHeader}`))
+
+            const headerCell = _createElem('td')
             headerRow.appendChild(headerCell)
+
+            const container = _createElem('div')
+            headerCell.appendChild(container)
+            container.setAttribute("class", "headerCell")
+            container.appendChild(_createText(colHeader))
         });
     }
 
@@ -519,6 +521,9 @@ class EasyTable {
 
 const style1 = `
     .headerCell {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         min-width: 100px;
         text-align: center;
         background-color: rgb(194, 187, 187);
@@ -541,6 +546,10 @@ const style1 = `
 
 const style2 = `
     .headerCell {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
         color: white;
         min-width: 100px;
         background-color: #007c77;
@@ -562,10 +571,18 @@ const style2 = `
     .dataRow:nth-child(even) {
         background-color: #bbb;
     }
+
+    button {
+        font-size: 12px;
+    }
 `
 
 const style3 = `
     .headerCell {
+        display: flex;
+    align-items: center;
+    justify-content: space-between;
+
         min-width: 100px;
         background-color: rgb(91, 126, 223);
         font-size: 1.75rem;

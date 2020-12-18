@@ -20,25 +20,41 @@
     background-color: rgb(243, 120, 120);
 } */
 
-.headerCell {
+/* .headerCell {
         color: white;
         min-width: 100px;
         background-color: #007c77;
         font-size: 1.75rem;
         border: 1px solid #333;
-    }
+} */
 
-    .inputCell {
-        padding: 3px;
-        margin: auto;
-    }
+.headerCell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    .dataCell {
-        padding: 3px;
-        font-size: 1.25rem;
-        border: 1px solid #333;
-    }
+    color: white;
+    min-width: 100px;
+    background-color: #007c77;
+    font-size: 1.75rem;
+    border: 1px solid #333;
+}
 
-    .dataRow:nth-child(even) {
-        background-color: #bbb;
-    }
+.inputCell {
+    padding: 3px;
+    margin: auto;
+}
+
+.dataCell {
+    padding: 3px;
+    font-size: 1.25rem;
+    border: 1px solid #333;
+}
+
+.dataRow:nth-child(even) {
+    background-color: #bbb;
+}
+
+button {
+    font-size: 12px;
+}
