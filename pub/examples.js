@@ -3,24 +3,15 @@ const log = console.log
 
 const step1 = new EasyTable("step1", "step1Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
     defaultStyle: 2,
-    stylesheet: null,
-    cssText: null
+    defaultSearch: true
 })
 
 
 const step2 = new EasyTable("step2", "step2Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
     defaultStyle: 2,
-    // stylesheet: "EasyTable/EasyTable.css",
-    stylesheet: null,
-    cssText: null
+    defaultSearch: true
 })
 step2.appendRow(["Camry", "Toyota", "2000"])
 step2.appendRow(["Civic", "Honda", "2005"])
@@ -34,13 +25,8 @@ step2.insertRow(1, ["458", "Ferrari", "1996"])
 
 const step21 = new EasyTable("step21", "step21Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
     defaultStyle: 2,
-    // stylesheet: "EasyTable/EasyTable.css",
-    stylesheet: null,
-    cssText: null
+    defaultSearch: true
 })
 step21.appendRow(["Camry", "Toyota", "2000"])
 step21.appendRow(["Civic", "Honda", "2005"])
@@ -56,13 +42,8 @@ step21.appendCol("Purchases", 0, null)
 
 const step22 = new EasyTable("step22", "step22Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
     defaultStyle: 2,
-    // stylesheet: "EasyTable/EasyTable.css",
-    stylesheet: null,
-    cssText: null
+    defaultSearch: true
 })
 step22.appendRow(["Camry", "Toyota", "2000"])
 step22.appendRow(["Civic", "Honda", "2005"])
@@ -88,12 +69,8 @@ step22.insertCol(3, "Ratings", null, [
 
 const step3 = new EasyTable("step3", "step3Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
     defaultStyle: 2,
-    stylesheet: null,
-    cssText: null
+    defaultSearch: true
 })
 step3.appendRow(["Camry", "Toyota", "2000"])
 step3.appendRow(["Civic", "Honda", "2005"])
@@ -109,12 +86,8 @@ step3.setCell(5, 0, "Mustang")
 
 const step4 = new EasyTable("step4", "step4Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
-    defaultStyle: 2,
-    stylesheet: null,
-    cssText: null
+    defaultStyle: 1,
+    defaultSearch: true
 })
 step4.appendRow(["Camry", "Toyota", "2000"])
 step4.appendRow(["Civic", "Honda", "2005"])
@@ -131,7 +104,7 @@ step4.popRow()
 
 const step5 = new EasyTable("step5", "step5Table", {
     columns: ['Model', 'Brand', 'Year'],
-    defaultStyle: 2,
+    defaultStyle: 1,
     // stylesheet: "EasyTable/EasyTable.css",
     defaultSearch: true,
     defaultSort: true,

@@ -160,7 +160,6 @@ class EasyTable {
         const container = _createElem('div')
         headerCell.appendChild(container)
         container.setAttribute("class", "headerCell")
-        container.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding-left: 5px;"
         container.appendChild(_createText(colHeader))
 
         return headerCell
@@ -371,22 +370,27 @@ class EasyTable {
         const searchCell = _createElem('td')
         searchRow.appendChild(searchCell)
         searchCell.setAttribute("colspan", this.colCount)
+        searchCell.setAttribute("class", "searchCell")
+
+        // Middle layer of div makes style manipulation easier (td's display properties are weird)
+        const container = _createElem('div')
+        container.setAttribute("class", "searchContainer")
+        searchCell.appendChild(container)
 
         // Search bar.
         const searchBarInput = _createElem('input')
-        searchCell.appendChild(searchBarInput)
+        container.appendChild(searchBarInput)
         this.input = searchBarInput
         searchBarInput.addEventListener("search", this.resetTable)
-
         searchBarInput.placeholder = "Search..."
         searchBarInput.setAttribute("type", "search")
-        searchBarInput.style.cssText = "width: 85%; margin: 0px; padding: 0px; box-sizing: border-box;"
+        searchBarInput.style.cssText = "width: 85%;"
 
         // Search button.
         const searchButton = _createElem('button')
-        searchCell.appendChild(searchButton)
+        container.appendChild(searchButton)
 
-        searchButton.style.cssText = "width: 15%; margin: 0px; padding: 0px;  box-sizing: border-box;"
+        searchButton.style.cssText = "width: 15%;"
         searchButton.innerText = "Search"
         searchButton.onclick = this._searchHelper
     }
@@ -466,6 +470,9 @@ class EasyTable {
     _initializeSort = () => {
         const headerCells = Array.from(this.header.children[0].children)
         headerCells.forEach(header => {
+            // Necessary to adjust the new buttons aestheticaly.
+            header.children[0].style.cssText = "display: flex; align-items: center; justify-content: space-between;"
+            console.log(header)
             this._addSortButtons(header.children[0])
         })
     }
@@ -616,87 +623,152 @@ class EasyTable {
 
 const style1 = `
     .headerCell {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        min-width: 100px;
-        text-align: center;
-        background-color: rgb(194, 187, 187);
+        display: inline-block;
+        width: 100%;
+
+        color: white;
+        min-width: 75px;
+        background-color: #007c77;
         font-size: 1.75rem;
         border: 1px solid #333;
     }
-
     .inputCell {
         padding: 3px;
         margin: auto;
     }
-
     .dataCell {
         padding: 3px;
-        background-color: rgb(241, 241, 241);
         font-size: 1.25rem;
         border: 1px solid #333;
+    }
+    .dataRow:nth-child(even) {
+        background-color: #bbb;
+    }
+    .searchContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+        font-size: 1.25rem;
+        padding: 0px;
+    }
+    .searchCell {
+        padding: 0px;
+    }
+    input {
+        height: 100%;
+        width: 85%;
+        box-sizing: border-box;
+    }
+    button {
+        font-size: 15px;
+        height: 100%;
+        box-sizing: border-box;
+        min-width: fit-content; 
+        padding: 0px 1px;
     }
 `
 
 const style2 = `
     .headerCell {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: inline-block;
+        width: 100%;
 
         color: white;
-        min-width: 100px;
-        background-color: #007c77;
+        min-width: 75px;
+        background-color: #98b653fd;
         font-size: 1.75rem;
         border: 1px solid #333;
     }
-
     .inputCell {
         padding: 3px;
         margin: auto;
     }
-
     .dataCell {
+        text-align: center;
         padding: 3px;
         font-size: 1.25rem;
         border: 1px solid #333;
     }
-
     .dataRow:nth-child(even) {
-        background-color: #bbb;
+        background-color: #b1d166b6;
     }
-
+    .searchContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+        font-size: 1.25rem;
+        padding: 0px;
+    }
+    .searchCell {
+        padding: 0px;
+    }
+    input {
+        height: 100%;
+        width: 85%;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: 1px solid grey;
+    }
     button {
-        font-size: 12px;
+        font-size: 15px;
+        height: 100%;
+        box-sizing: border-box;
+        background-color: whitesmoke;
+        border: 1px solid grey;
+        border-radius: 5px;
+        min-width: fit-content; 
+        padding: 0px 1px;
     }
 `
 
 const style3 = `
     .headerCell {
-        display: flex;
-    align-items: center;
-    justify-content: space-between;
+        display: inline-block;
+        width: 100%;
 
-        min-width: 100px;
-        background-color: rgb(91, 126, 223);
+        color: white;
+        min-width: 75px;
+        background-color: #f86868fd;
         font-size: 1.75rem;
         border: 1px solid #333;
     }
-
     .inputCell {
         padding: 3px;
         margin: auto;
     }
-
     .dataCell {
+        text-align: center;
         padding: 3px;
         font-size: 1.25rem;
         border: 1px solid #333;
+        background-color: rgb(241, 198, 198);
     }
-
-    .dataRow:nth-child(even) {
-        background-color: rgb(163, 184, 243);
+    .searchContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+        font-size: 1.25rem;
+        padding: 0px;
+    }
+    .searchCell {
+        padding: 0px;
+    }
+    input {
+        height: 100%;
+        width: 85%;
+        box-sizing: border-box;
+    }
+    button {
+        font-size: 15px;
+        height: 100%;
+        box-sizing: border-box;
+        background-color: white;
+        border: 1.5px lightgrey solid;
+        min-width: fit-content; 
+        padding: 0px 1px;
     }
 `
 
