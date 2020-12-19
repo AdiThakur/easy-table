@@ -197,3 +197,14 @@ input {
     width: fit-content;
     padding:2.5px 5px;
 }
+
+.step-help {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 10px;
+    width: fit-content;
+
+    color: black;
+}

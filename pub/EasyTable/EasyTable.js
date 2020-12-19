@@ -2,7 +2,7 @@
 
 (function (global, document) {
 
-    /** General Helpers */
+    /** Global Helpers (Private) */
 
     function _createElem(elemString) {
         return document.createElement(elemString)
@@ -17,167 +17,191 @@
         return (countCells == maxCells)
     }
 
-    /** Default Styles */
-
-    /** Default Styles. */
+    /** Global Constants: Default Styles. */
 
     const style1 = `
-.headerCell {
-    display: inline-block;
-    width: 100%;
+        .headerCell {
+            display: inline-block;
+            width: 100%;
 
-    color: white;
-    min-width: 75px;
-    background-color: #007c77;
-    font-size: 1.75rem;
-    border: 1px solid #333;
-}
-.inputCell {
-    padding: 3px;
-    margin: auto;
-}
-.dataCell {
-    padding: 3px;
-    font-size: 1.25rem;
-    border: 1px solid #333;
-}
-.dataRow:nth-child(even) {
-    background-color: #bbb;
-}
-.searchContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3px;
-    font-size: 1.25rem;
-    padding: 0px;
-}
-.searchCell {
-    padding: 0px;
-}
-input {
-    height: 100%;
-    width: 85%;
-    box-sizing: border-box;
-}
-button {
-    font-size: 15px;
-    height: 100%;
-    box-sizing: border-box;
-    min-width: fit-content; 
-    padding: 0px 1px;
-}
+            color: white;
+            min-width: 75px;
+            background-color: #007c77;
+            font-size: 1.75rem;
+            border: 1px solid #333;
+        }
+        .inputCell {
+            padding: 3px;
+            margin: auto;
+        }
+        .dataCell {
+            padding: 3px;
+            font-size: 1.25rem;
+            border: 1px solid #333;
+        }
+        .dataRow:nth-child(even) {
+            background-color: #bbb;
+        }
+        .searchContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3px;
+            font-size: 1.25rem;
+            padding: 0px;
+        }
+        .searchCell {
+            padding: 0px;
+        }
+        input {
+            height: 100%;
+            width: 85%;
+            box-sizing: border-box;
+        }
+        button {
+            font-size: 15px;
+            height: 100%;
+            box-sizing: border-box;
+            min-width: fit-content; 
+            padding: 0px 1px;
+        }
+        .sortButton {
+            display: block; 
+            margin: 0px; 
+            width: 45px; 
+            font-size: 12px;
+        }
 `
 
     const style2 = `
-.headerCell {
-    display: inline-block;
-    width: 100%;
+        .headerCell {
+            display: inline-block;
+            width: 100%;
 
-    color: white;
-    min-width: 75px;
-    background-color: #98b653fd;
-    font-size: 1.75rem;
-    border: 1px solid #333;
-}
-.inputCell {
-    padding: 3px;
-    margin: auto;
-}
-.dataCell {
-    text-align: center;
-    padding: 3px;
-    font-size: 1.25rem;
-    border: 1px solid #333;
-}
-.dataRow:nth-child(even) {
-    background-color: #b1d166b6;
-}
-.searchContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3px;
-    font-size: 1.25rem;
-    padding: 0px;
-}
-.searchCell {
-    padding: 0px;
-}
-input {
-    height: 100%;
-    width: 85%;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: 1px solid grey;
-}
-button {
-    font-size: 15px;
-    height: 100%;
-    box-sizing: border-box;
-    background-color: whitesmoke;
-    border: 1px solid grey;
-    border-radius: 5px;
-    min-width: fit-content; 
-    padding: 0px 1px;
-}
+            color: white;
+            min-width: 75px;
+            background-color: #98b653fd;
+            font-size: 1.75rem;
+            border: 1px solid #333;
+        }
+        .inputCell {
+            padding: 3px;
+            margin: auto;
+        }
+        .dataCell {
+            text-align: center;
+            padding: 3px;
+            font-size: 1.25rem;
+            border: 1px solid #333;
+        }
+        .dataRow:nth-child(even) {
+            background-color: #b1d166b6;
+        }
+        .searchContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3px;
+            font-size: 1.25rem;
+            padding: 0px;
+        }
+        .searchCell {
+            padding: 0px;
+        }
+        input {
+            height: 100%;
+            width: 85%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid grey;
+        }
+        button {
+            font-size: 15px;
+            height: 100%;
+            box-sizing: border-box;
+            background-color: whitesmoke;
+            border: 1px solid grey;
+            border-radius: 5px;
+            min-width: fit-content; 
+            padding: 0px 1px;
+        }
+        .sortButton {
+            display: block; 
+            margin: 0px; 
+            width: 45px; 
+            font-size: 12px;
+        }
 `
 
     const style3 = `
-.headerCell {
-    display: inline-block;
-    width: 100%;
+        .headerCell {
+            display: inline-block;
+            width: 100%;
 
-    color: white;
-    min-width: 75px;
-    background-color: #f86868fd;
-    font-size: 1.75rem;
-    border: 1px solid #333;
-}
-.inputCell {
-    padding: 3px;
-    margin: auto;
-}
-.dataCell {
-    text-align: center;
-    padding: 3px;
-    font-size: 1.25rem;
-    border: 1px solid #333;
-    background-color: rgb(241, 198, 198);
-}
-.searchContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3px;
-    font-size: 1.25rem;
-    padding: 0px;
-}
-.searchCell {
-    padding: 0px;
-}
-input {
-    height: 100%;
-    width: 85%;
-    box-sizing: border-box;
-}
-button {
-    font-size: 15px;
-    height: 100%;
-    box-sizing: border-box;
-    background-color: white;
-    border: 1.5px lightgrey solid;
-    min-width: fit-content; 
-    padding: 0px 1px;
-}
+            color: white;
+            min-width: 75px;
+            background-color: #f86868fd;
+            font-size: 1.75rem;
+            border: 1px solid #333;
+        }
+        .inputCell {
+            padding: 3px;
+            margin: auto;
+        }
+        .dataCell {
+            text-align: center;
+            padding: 3px;
+            font-size: 1.25rem;
+            border: 1px solid #333;
+            background-color: rgb(241, 198, 198);
+        }
+        .searchContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3px;
+            font-size: 1.25rem;
+            padding: 0px;
+        }
+        .searchCell {
+            padding: 0px;
+        }
+        input {
+            height: 100%;
+            width: 85%;
+            box-sizing: border-box;
+        }
+        button {
+            font-size: 15px;
+            height: 100%;
+            box-sizing: border-box;
+            background-color: white;
+            border: 1.5px lightgrey solid;
+            min-width: fit-content; 
+            padding: 0px 1px;
+        }
+        .sortButton {
+            display: block; 
+            margin: 0px; 
+            width: 45px; 
+            font-size: 12px;
+        }
 `
     /** Private Attributes */
-    let originalBody = null
-    let newBody = null
 
+    // References to DOM elements required for some features.
+    let originalBody = null
+    let input = null
     let pageNumberDisplay = null
+
     let currPage = null
     let rowsPerPage = null
+
+    let colCount = 0
+
+    let searchEnabled = false
+    let paginateEnabled = false
+    let sortEnabled = false
 
     /**
      * Create a new table with specified name and columns, and append it to to the element
@@ -202,8 +226,7 @@ button {
         this.table.appendChild(this.footer)
 
         this.columns = [...options.columns]
-        this.colCount = this.columns.length
-        this.input = null
+        colCount = this.columns.length
         _setColumns.call(this)
 
         // Shadow DOM to encapsulate the table's CSS.
@@ -212,7 +235,7 @@ button {
 
         // Initialize search functionality.
         if (options.defaultSearch) {
-            this.searchEnabled = true
+            searchEnabled = true
             _initializeSearchBar.call(this)
         }
 
@@ -233,7 +256,7 @@ button {
 
         // Initialize pagination.
         if (options.paginate) {
-            this.paginateEnabled = true
+            paginateEnabled = true
             rowsPerPage = options.paginate.perPage
             currPage = 1
             // Create default page changing buttons.
@@ -245,7 +268,7 @@ button {
 
         // Initialize sorting.
         if (options.defaultSort) {
-            this.sortEnabled = true
+            sortEnabled = true
             _initializeSort.call(this)
         }
     }
@@ -288,6 +311,16 @@ button {
         return headerCell
     }
 
+    /** General Getters */
+
+    function getRowCount() {
+        return this.body.childElementCount
+    }
+
+    function getColCount() {
+        return colCount
+    }
+
     /** Loading from Data-sets Functionality.*/
 
     /**
@@ -301,7 +334,7 @@ button {
 
         lines.forEach(line => {
             const values = line.trim().split(",")
-            if (values.length != this.colCount) {
+            if (values.length != colCount) {
                 return false
             }
             newRows.push(values)
@@ -311,6 +344,25 @@ button {
             this.appendRow(row)
         })
         return true
+    }
+
+    function saveToCSV() {
+
+        // Ensures entire table is loaded before saving.
+        if (paginateEnabled) _paginate.call(this)
+
+        let csvString = this.columns.join(", ") + "\n"
+        const rows = this.getRowCount()
+        const cols = colCount
+
+        for (let i = 0; i < rows; i++) {
+            const values = []
+            for (let j = 0; j < cols; j++) {
+                values.push(this.getCell(i, j).innerText)
+            }
+            csvString = csvString + values.join(", ") + "\n"
+        }
+        return csvString
     }
 
     /**
@@ -339,14 +391,19 @@ button {
         return true
     }
 
-    /**
-     * @param {String} header           Header of new col.
-     * @param {Any} defaultData         Default data to be set in each row of the new col.
-     * @param {Array | Null} dataList   Array of data to be set in the rows of the new col.
-     * @returns {Boolean}               True on success, false on error.
-     */
-    function appendCol(header, defaultData, dataList) {
-        return this.insertCol(this.colCount, header, defaultData, dataList)
+    function saveToJSON() {
+
+        let objList = []
+        const rows = this.getRowCount()
+
+        for (let i = 0; i < rows; i++) {
+            const obj = {}
+            for (let j = 0; j < colCount; j++) {
+                obj[this.columns[j]] = this.getCell(i, j).innerText.trim()
+            }
+            objList.push(obj)
+        }
+        return JSON.stringify(objList)
     }
 
     /**
@@ -356,7 +413,7 @@ button {
      * @returns {Boolean}               True on success, false on error.
      */
     function appendCol(header, defaultData, dataList) {
-        return this.insertCol(this.colCount, header, defaultData, dataList)
+        return this.insertCol(colCount, header, defaultData, dataList)
     }
 
     /**
@@ -371,7 +428,7 @@ button {
         if (dataList && dataList.length != this.body.childElementCount) {
             return false
         }
-        if (!_valid_index(i, this.colCount + 1)) {
+        if (!_valid_index(i, colCount + 1)) {
             return false
         }
         if (!dataList && (defaultData === null)) {
@@ -384,7 +441,7 @@ button {
         const headerCell = _createHeader(header)
 
         const headerRow = this.header.children[0]
-        if (i == this.colCount) {
+        if (i == colCount) {
             headerRow.appendChild(headerCell)
         } else {
             headerRow.insertBefore(headerCell, headerRow.children[i])
@@ -403,21 +460,21 @@ button {
                 cell.appendChild(_createText(dataList[j]))
             }
             // Inserting new data-cell.
-            if (i == this.colCount) {
+            if (i == colCount) {
                 row.appendChild(cell)
             } else {
                 row.insertBefore(cell, row.children[i])
             }
         }
 
-        this.colCount++
+        colCount++
 
         // Add sort buttons for new column.
-        if (this.sortEnabled) _addSortButtons(headerCell)
+        if (sortEnabled) _addSortButtons.call(this, headerCell)
         // Making search bar span the new column.
-        if (this.searchEnabled) this.input.parentElement.parentElement.setAttribute("colspan", this.colCount)
+        if (searchEnabled) input.parentElement.parentElement.setAttribute("colspan", colCount)
         // Making the pagination tray span the new column.
-        if (this.paginateEnabled) this.footer.children[0].parentElement.setAttribute("colspan", this.colCount)
+        if (paginateEnabled) this.footer.children[0].setAttribute("colspan", colCount)
 
         return true
     }
@@ -438,17 +495,17 @@ button {
     }
 
     /**
-     * @param {Integer} i                       Index of the desired row.
-     * @param {Array} data                      Array of data to be set in the row at index i.
-     * @returns {Boolean}                       Returns true on success, false on error.
+     * @param {Integer} i   Index of the desired row.
+     * @param {Array} data  Array of data to be set in the row at index i.
+     * @returns {Boolean}   Returns true on success, false on error.
      */
     function setRow(i, data) {
 
-        if (!_valid_index(i, this.body.childElementCount) || !_valid_cells(data.length, this.colCount)) {
+        if (!_valid_index(i, this.body.childElementCount) || !_valid_cells(data.length, colCount)) {
             return false
         }
         let row = this.body.children[i]
-        for (let j = 0; j < this.colCount; j++) {
+        for (let j = 0; j < colCount; j++) {
             row.children[j].innerHTML = data[j]
         }
         return true
@@ -469,21 +526,21 @@ button {
      */
     function insertRow(i, cells) {
 
-        if (!_valid_index(i, this.body.childElementCount + 1) || !_valid_cells(cells.length, this.colCount)) {
+        if (!_valid_index(i, this.body.childElementCount + 1) || !_valid_cells(cells.length, colCount)) {
             return false
         }
         // Create new row; populate it well cells that contain specified data.
         let newRow = this.body.insertRow(i)
         newRow.setAttribute("class", "dataRow")
 
-        for (let j = 0; j < this.colCount; j++) {
+        for (let j = 0; j < colCount; j++) {
             const newCell = _createElem('td')
             newCell.setAttribute("class", "dataCell")
             newCell.appendChild(_createText(cells[j]))
             newRow.appendChild(newCell)
         }
         // Ensure that only on-page rows are displayed.
-        if (this.paginateEnabled) _paginate.call(this)
+        if (paginateEnabled) _paginate.call(this)
 
         return true
     }
@@ -506,7 +563,7 @@ button {
         }
         this.body.deleteRow(i)
         // Ensure that only on-page rows are displayed.
-        if (this.paginateEnabled) _paginate.call(this)
+        if (paginateEnabled) _paginate.call(this)
 
         return true
     }
@@ -521,7 +578,7 @@ button {
      */
     function getCell(row, col) {
 
-        if (!_valid_index(row, this.body.childElementCount) || !_valid_index(col, this.colCount)) {
+        if (!_valid_index(row, this.body.childElementCount) || !_valid_index(col, colCount)) {
             return null
         }
         return this.body.children[row].children[col]
@@ -535,7 +592,7 @@ button {
      */
     function setCell(row, col, data) {
 
-        if (!_valid_index(row, this.body.childElementCount) || !_valid_index(col, this.colCount)) {
+        if (!_valid_index(row, this.body.childElementCount) || !_valid_index(col, colCount)) {
             return false
         }
         this.getCell(row, col).innerText = data
@@ -553,7 +610,7 @@ button {
         // Cell that spans all columns; houses search bar.
         const searchCell = _createElem('td')
         searchRow.appendChild(searchCell)
-        searchCell.setAttribute("colspan", this.colCount)
+        searchCell.setAttribute("colspan", colCount)
         searchCell.setAttribute("class", "searchCell")
 
         // Middle layer of div makes style manipulation easier (td's display properties are weird)
@@ -564,7 +621,7 @@ button {
         // Search bar.
         const searchBarInput = _createElem('input')
         container.appendChild(searchBarInput)
-        this.input = searchBarInput
+        input = searchBarInput
         searchBarInput.addEventListener("search", resetTable.bind(this))
         searchBarInput.placeholder = "Search..."
         searchBarInput.setAttribute("type", "search")
@@ -581,8 +638,7 @@ button {
 
     // Used to extract search query from the default searchbar (if enabled).
     function _searchHelper() {
-        console.log("Searching for ", this.input.value.toUpperCase())
-        const query = this.input.value.toUpperCase()
+        const query = input.value.toUpperCase()
         this.search(query)
     }
 
@@ -590,18 +646,13 @@ button {
      * Reset the table (clear the results of a search.)
      */
     function resetTable() {
-
-        console.log("Resetting")
-        console.log("original", originalBody)
-        console.log("current body", this.body)
-        console.log("new", newBody)
         // Reset table to show all of the original rows.
         if (originalBody) {
             this.body.remove()
             this.body = originalBody
             this.table.appendChild(this.body)
         }
-        if (this.paginateEnabled) {
+        if (paginateEnabled) {
             currPage = 1
             _paginate.call(this)
         }
@@ -627,7 +678,7 @@ button {
             const currRow = this.body.children[i]
             let currRowMatches = 0
             // If any cell matches query; display row.
-            for (let j = 0; j < this.colCount; j++) {
+            for (let j = 0; j < colCount; j++) {
                 const currCell = currRow.children[j]
                 if (currCell.innerText.toUpperCase().includes(query)) {
                     currRowMatches++
@@ -642,8 +693,6 @@ button {
 
         // Original rows saved for later.
         originalBody = this.body.cloneNode(true)
-        console.log("search original:", originalBody)
-        console.log("search new:", newBody)
         this.body.remove()
 
         // Display only the rows that match the query.
@@ -651,7 +700,7 @@ button {
         this.body = newBody
 
         // Paginate the results.
-        if (this.paginateEnabled) _paginate.call(this)
+        if (paginateEnabled) _paginate.call(this)
         return true
     }
 
@@ -661,25 +710,26 @@ button {
     function _initializeSort() {
         const headerCells = Array.from(this.header.children[0].children)
         headerCells.forEach(header => {
-            // Necessary to adjust the new buttons aestheticaly.
-            header.children[0].style.cssText = "display: flex; align-items: center; justify-content: space-between;"
-            console.log(header)
-            _addSortButtons.call(this, header.children[0])
+            _addSortButtons.call(this, header)
         })
     }
 
     // Add sorting buttons to given header cell.
     function _addSortButtons(newHeaderCell) {
 
+        const headerCellDiv = newHeaderCell.children[0]
+
+        // Necessary to change the CSS to aesthetically accomodate the new buttons.
+        headerCellDiv.style.cssText = "display: flex; align-items: center; justify-content: space-between;"
+
         const container = _createElem('div')
-        newHeaderCell.appendChild(container)
+        headerCellDiv.appendChild(container)
         container.style.cssText = "margin-left: 5px;"
 
         const createSortButton = (direction) => {
             const sortButton = _createElem('button')
             container.appendChild(sortButton)
             sortButton.setAttribute("class", "sortButton")
-            sortButton.style.cssText = "display: block; margin: 0px; width: 45px; font-size: 12px"
             sortButton.innerText = direction == 1 ? "ASC" : "DSC"
             sortButton.onclick = direction == 1 ? _sortAscending.bind(this) : _sortDescending.bind(this)
         }
@@ -728,7 +778,7 @@ button {
             }
         }
         // Paginate the sorted rows.
-        if (this.paginateEnabled) {
+        if (paginateEnabled) {
             _paginate.call(this)
         }
     }
@@ -763,7 +813,7 @@ button {
         // Houses the prev and next buttons, and the page number.
         const cell = _createElem('td')
         this.footer.appendChild(cell)
-        cell.setAttribute("colspan", this.colCount)
+        cell.setAttribute("colspan", colCount)
 
         const paginationTray = _createElem('div')
         cell.appendChild(paginationTray)
@@ -789,7 +839,7 @@ button {
      * Displays the previous page of the table.
      */
     function prevPage() {
-        if (!this.paginateEnabled) {
+        if (!paginateEnabled) {
             return
         }
         currPage -= 1
@@ -803,7 +853,7 @@ button {
      * Displays the next page of the table.
      */
     function nextPage() {
-        if (!this.paginateEnabled) {
+        if (!paginateEnabled) {
             return
         }
         currPage += 1
@@ -814,8 +864,12 @@ button {
     }
 
     EasyTable.prototype = {
+        getRowCount,
+        getColCount,
         loadFromCSV,
+        saveToCSV,
         loadFromJSON,
+        saveToJSON,
         getRow,
         setRow,
         appendRow,

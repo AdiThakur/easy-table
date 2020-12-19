@@ -167,7 +167,7 @@
                 const myTable = new EasyTable("myTable", "main", { <br>
                 &emsp;&emsp;&emsp; columns: ['Model', 'Brand', 'Year'], <br>
                 &emsp;&emsp;&emsp; defaultSearch: true, <br>
-                &emsp;&emsp;&emsp; defaultStyle: 2, <br>
+                &emsp;&emsp;&emsp; defaultStyle: 1, <br>
                 &emsp;&emsp;&emsp; defaultSort: true, <br>
                 &emsp;&emsp;&emsp; paginate: { perPage: 4, default: true}<br>
                 }
@@ -192,7 +192,9 @@
             <h3>Parameters</h3>
 
             <h4><span class="param">csvString</span></h4>
-            <p>String containing data in CSV format. Note that the corresponding
+            <p>String containing data in valid <span class="option">CSV</span>
+                format. Note that the
+                corresponding
                 columns must be set during instantiation; <span
                     class="option">.loadFromCSV()</span> doesn't
                 set the columns based on data read from <span
@@ -211,16 +213,63 @@
             <h3>Parameters</h3>
 
             <h4><span class="param">jsonString</span></h4>
-            <p>String containing data in JSON format. Note that the
+            <p>String containing data in valid
+                <span class="option">JSON</span>
+                format. Currently, EASYTable
+                only provides support for linear (non-nested)
+                <span class="option">JSON</span>
+                . Note that
+                the
                 corresponding
                 columns must be set during instantiation; <span
                     class="option">.loadFromJSON()</span> doesn't
                 set the columns based on data read from <span
-                    class="option">jsonString</span> </p>
+                    class="option">jsonString</span>
+            </p>
 
             <h3>Return</h3>
             <p><span class="option">true</span> on success, <span
                     class="option">false</span> otherwise.</p>
+        </div>
+
+        <!-- Saving Data-Sets-->
+        <div class="step">
+
+            <h2>Saving Data-Sets</h2>
+
+            <h2 class="method">saveToCSV()</h2>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.saveToCSV()
+            </p>
+            <h3>Parameters</h3>
+            <p>
+                None
+            </p>
+
+            <h3>Return</h3>
+            <p>
+                A string containing the table's data in
+                <span class="option">CSV</span> format.
+            </p>
+
+            <h2 class="method">saveToJSON()</h2>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.saveToJSON()
+            </p>
+            <h3>Parameters</h3>
+            <p>
+                None
+            </p>
+
+            <h3>Return</h3>
+            <p>
+                A string containing the table's data in
+                <span class="option">JSON</span> format.
+            </p>
         </div>
 
         <!-- Row Methods -->
@@ -228,6 +277,29 @@
 
             <h2>Row Methods</h2>
 
+            <!-- getRowCount -->
+            <h2 class="method">getRowCount()</h2>
+            <p>Returns the number of rows in the
+                displayed
+                table. If the table is currently showing the results of a
+                search, it will return the number of rows of the table in this
+                state (number of rows that match the search query).
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.getRowCount()
+            </p>
+            <h3>Parameters</h3>
+            <p>None</p>
+
+            <h3>Return</h3>
+            <p>
+                Number of rows in the currently displayed table.
+            </p>
+
+
+            <!-- getRow -->
             <h2 class="method">getRow()</h2>
             <p>Gets and returns a row at the desired index.</p>
 
@@ -430,6 +502,24 @@
         <div class="step">
 
             <h2>Column Methods</h2>
+
+            <!-- getColCount -->
+            <h2 class="method">getColCount()</h2>
+            <p>
+                Returns the number of columns in the table.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.getColCount()
+            </p>
+            <h3>Parameters</h3>
+            <p>None</p>
+
+            <h3>Return</h3>
+            <p>
+                Number of columns in the table.
+            </p>
 
             <!-- appendCol -->
 
