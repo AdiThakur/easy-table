@@ -89,51 +89,50 @@ class EasyTable {
     /** Loading from Data-sets Functionality.*/
 
     /**
-     * @param {Array[String]} listOfCSV     Array of comma-seperated values. All elements must
-     *                                      contain <colCount> values. Must not container headers 
-     *                                      as they will be treated lik regular data.
+     * @param {String} csvString    String containing data in CSV format.
+     * @returns                     True on success, false otherwise.
      */
-    loadFromCSV = (listOfCSV) => {
+    loadFromCSV = (csvString) => {
 
-        if (!listOfCSV || listOfCSV[0].split(",").length != this.colCount) {
-            return false
-        }
-        listOfCSV.forEach(csv => {
-            const values = csv.trim().split(",")
-            this.appendRow(values)
+        const lines = csvString.split("\n")
+        const newRows = []
+
+        lines.forEach(line => {
+            const values = line.trim().split(",")
+            if (values.length != this.colCount) {
+                return false
+            }
+            newRows.push(values)
+        })
+        // Only start insertion if all of the CSV was correctly parsed.
+        newRows.forEach(row => {
+            this.appendRow(row)
         })
         return true
     }
 
     /**
-     * @param {Array[String]} listOfJSON    Array of JSON strings.
-     * @returns {Boolean}                   True on success, false otherwise.
+     * @param {Array[String]} json    Valid JSON string.
+     * @returns {Boolean}             True on success, false otherwise.
      */
-    loadFromJSON = (listOfJSON) => {
+    loadFromJSON = (json) => {
 
-        const newRows = []
+        let objList
+        try {
+            objList = JSON.parse(json)
+        } catch (error) {
+            console.warn(`EasyTable.loadFromJSON: Invalid JSON. \n Error Caught: ${error}`)
+            return false
+        }
 
-        listOfJSON.forEach(json => {
-            let obj
-            try {
-                obj = JSON.parse(json)
-            } catch (error) {
-                console.warn(`EasyTable.loadFromJSON: Invalid JSON. \n Error Caught: ${error}`)
-                return false
-            }
-
+        objList.forEach(obj => {
             const values = []
             // Keys may not be in the same order as columns; arrange them accordingly.
             Object.keys(obj).forEach(key => {
                 const col = this.columns.indexOf(key)
                 values.splice(col, 0, obj[key])
             })
-            newRows.push(values)
-        })
-
-        // Only start insertion if all of the JSON was correctly parsed.
-        newRows.forEach(row => {
-            this.appendRow(row)
+            this.appendRow(values)
         })
         return true
     }
@@ -232,9 +231,9 @@ class EasyTable {
         // Add sort buttons for new column.
         if (this.sortEnabled) this._addSortButtons(headerCell)
         // Making search bar span the new column.
-        if (this.searchEnabled) this.input.parentElement.setAttribute("colspan", this.colCount)
+        if (this.searchEnabled) this.input.parentElement.parentElement.setAttribute("colspan", this.colCount)
         // Making the pagination tray span the new column.
-        if (this.paginateEnabled) this.footer.children[0].setAttribute("colspan", this.colCount)
+        if (this.paginateEnabled) this.footer.children[0].parentElement.setAttribute("colspan", this.colCount)
 
         return true
     }
@@ -257,7 +256,7 @@ class EasyTable {
     /**
      * @param {Integer} i                       Index of the desired row.
      * @param {Array} data                      Array of data to be set in the row at index i.
-     * @returns {HTMLTableRowElement | Null}    Returns true on success, false on error.
+     * @returns {Boolean}    Returns true on success, false on error.
      */
     setRow = (i, data) => {
 
@@ -314,7 +313,7 @@ class EasyTable {
 
     /**
      * @param {Integer} i                       Index of the row to delete.
-     * @returns {HTMLTableRowElement | Null}    Returns true if successful, null otherwise.
+     * @returns {Boolean | Null}    Returns true if successful, null otherwise.
      */
     deleteRow = (i) => {
 

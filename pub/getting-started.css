@@ -84,7 +84,7 @@ ul {
 li {
     display: flex;
     align-items: center;
-    padding: 0rem 0.5rem;
+    padding: 0px;
     list-style: none;
     height: 100%;
 
@@ -133,10 +133,11 @@ li:hover{
     line-height: 1.5rem;
 }
 
-.precode {
+.option {
+    display: inline;
     margin-left: auto;
     margin-right: auto;
-    padding: 1rem;
+    padding: 0px 5px;
 
     background-color: rgba(211, 211, 211, 0.486);
     
@@ -144,5 +145,24 @@ li:hover{
     font-size: 0.9rem;
     font-weight: 550;
     line-height: 1.5rem;
-    text-align: left;
+}
+
+.param {
+    color: white;
+    display: inline;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px 10px;
+
+    background-color: rgba(66, 64, 64, 0.801);
+    
+    font-family: Consolas,"courier new";
+    font-size: 0.9rem;
+    font-weight: 550;
+    line-height: 1.5rem;
+}
+
+.subsec {
+    width: 90%;
+    margin: auto;
 }

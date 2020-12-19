@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyDocs!</title>
+    <link rel="stylesheet" href="getting-started.css">
+    <script defer type="text/javascript" src='EasyTable/EasyTable.js'></script>
+    <script defer type="text/javascript" src='docs.js'></script>
+</head>
+
+<body>
+
+    <nav>
+        <span class="logo">
+            <h1>EASYTable</h1>
+        </span>
+        <ul>
+            <li>
+                <a href="/GettingStarted">Getting Started</a>
+            </li>
+            <li style="background-color:#777;">
+                <a href="/Docs">Docs</a>
+            </li>
+            <li>
+                <a href="/Examples">Examples</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="main">
+
+        <div class="step">
+            <h1>Welcome to EASYDocs</h1>
+            <p>
+                Here you will find the complete and detailed list of features
+                and functionalities offered by the EASYTable libary. Please
+                visit the getting-started page for setup help, and to get an
+                elemental understanding of the basic usage. For more advanced
+                use-cases, please visit the examples page.
+            </p>
+        </div>
+
+        <div class="step">
+            <h1>Constructor</h1>
+            <h3>Syntax</h3>
+            <p class="code">
+                const myTable = new EasyTable(name, parent_element, options)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">name</span></h4>
+            <p>Name of table for easy identification</p>
+
+            <h4><span class="param">parent_element</span></h4>
+            <p>Id of parent element; the newly created table is appended as a
+                child to the element with id
+                <span class="option">parent_element</span>
+            </p>
+
+            <h4><span class="param">options</span></h4>
+            <p>
+                An object-literal that specifies the properties of the table
+                being constructed. The following attributes can be set within
+                the object-literal
+            </p>
+            <div class="subsec">
+                <p>
+                    <span class="option">columns</span>
+                </p>
+                <p>
+                    Array of strings representing column headers.
+                </p>
+
+                <p>
+                    <span class="option">defaultStyle</span>
+                    <span>[optional]</span>
+                </p>
+                <p><span class="option">1</span>, <span class="option">2</span>,
+                    or <span class="option">3</span>.
+                    Sets the corresponding default
+                    styles provided by the library</p>
+
+                <p>
+                    <span class="option">stylesheet</span>
+                    <span>[optional]</span>
+                </p>
+                <p>
+                    Path to custom CSS file. Note that each EASYTable DOM
+                    element
+                    is
+                    encapsulated within a shadow-root; Selectors designed for
+                    the
+                    table will not affect the rest of the HTML.
+                </p>
+
+                <p>
+                    <span class="option">cssText</span>
+                    <span> [optional]</span>
+                </p>
+                <p>
+                    String containing inline-css.
+                </p>
+
+                <p>
+                    <span class="option">paginate</span>
+                    <span>[optional]</span>
+                </p>
+                <p>
+                    An object-literal that specifies the properties of the
+                    pagination feature.
+                </p>
+                <div class="subsec">
+                    <p>
+                        <span class="option"> perPage</span>
+                    </p>
+                    <p>
+                        Number of rows per page.
+                    </p>
+                    <p>
+                        <span class="option"> default</span>
+                    </p>
+                    <p>
+                        Boolean to enable/disable the default buttons for
+                        navigating the pages
+                        of the table. If set to <span
+                            class="option">false</span>, you must explicitly
+                        call the <span class="option">.prevPage()</span> and
+                        <span class="option">.nextPage()</span> methods to
+                        enable navigation between the pages of the table.
+                    </p>
+                </div>
+
+                <p>
+                    <span class="option">defaultSearch</span>
+                    <span>[optional]</span>
+                </p>
+                <p>
+                    Boolean to enable/disable the default search bar. If set to
+                    <span class="option">false</span>, you must explicitly
+                    set the <span class="option">.search()</span> method as a
+                    callback to a button-click event (or some alternative) to
+                    enable searching.
+                </p>
+
+                <p>
+                    <span class="option">defaultSort</span>
+                    <span>[optional]</span>
+                </p>
+                <p>
+                    Boolean to enable/disable the default sorting buttons. If
+                    set to
+                    <span class="option">false</span>, you must explicitly
+                    set the <span class="option">.sort()</span> method as a
+                    callback to a button-click event (or some alternative) to
+                    enable sorting.
+                </p>
+
+            </div>
+
+            <h3>Return</h3>
+            <p>N/A</p>
+
+            <h3>Example</h3>
+            <p class="code">
+                const myTable = new EasyTable("myTable", "main", { <br>
+                &emsp;&emsp;&emsp; columns: ['Model', 'Brand', 'Year'], <br>
+                &emsp;&emsp;&emsp; defaultSearch: true, <br>
+                &emsp;&emsp;&emsp; defaultStyle: 2, <br>
+                &emsp;&emsp;&emsp; defaultSort: true, <br>
+                &emsp;&emsp;&emsp; paginate: { perPage: 4, default: true}<br>
+                }
+            </p>
+
+            <h4>Result</h4>
+            <p>Note that some data has been added.</p>
+            <div id="constructor_table" class="step-table"></div>
+        </div>
+
+        <!-- Loading Data-Sets-->
+        <div class="step">
+
+            <h1>Loading Data-Sets</h1>
+
+            <h2>loadFromCSV()</h2>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.loadFromCSV(csvString)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">csvString</span></h4>
+            <p>String containing data in CSV format. Note that the corresponding
+                columns must be set during instantiation; <span
+                    class="option">.loadFromCSV()</span> doesn't
+                set the columns based on data from <span
+                    class="option">csvString</span> </p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.</p>
+
+            <h2>loadFromJSON()</h2>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.loadFromJSON(jsonString)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">jsonString</span></h4>
+            <p>String containing data in JSON format. Note that the
+                corresponding
+                columns must be set during instantiation; <span
+                    class="option">.loadFromJSON()</span> doesn't
+                set the columns based on data from <span
+                    class="option">jsonString</span> </p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.</p>
+        </div>
+
+        <!-- Row Methods -->
+        <div class="step">
+
+            <h1>Row Methods</h1>
+
+            <h2>getRow()</h2>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.getRow(i)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">i</span></h4>
+            <p>Index of the desired row.</p>
+
+            <h3>Return</h3>
+            <p>
+                The <span class="option">HTMLTableRowElement</span> at index
+                <span class="option">i</span> on success,
+                <span class="option">null</span> otherwise.
+            </p>
+
+
+            <h2>setRow()</h2>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.setRow(i, data)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">i</span></h4>
+            <p>Index of the desired row.</p>
+            <h4><span class="param">data</span></h4>
+            <p>
+                Array containing the data to be set in the cells of the row at
+                index <span class="option">i</span>. Note that <span
+                    class="option">data.length</span> must match the number of
+                columns.
+            </p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.</p>
+
+        </div>
+
+
+    </div>
+</body>
+
+</html>
+
+<!-- <div class="step">
+    <h2>loadFromCSV</h2>
+
+    <h3>Syntax</h3>
+    <h3>Parameters</h3>
+    <h3>Return</h3>
+</div> -->
