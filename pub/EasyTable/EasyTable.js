@@ -114,15 +114,13 @@ class EasyTable {
     saveToCSV = () => {
 
         // Ensures entire table is loaded before saving.
-        if (this.paginateEnabled) _paginate.call(this)
+        if (this.paginateEnabled) this._paginate()
 
         let csvString = this.columns.join(", ") + "\n"
-        const rows = this.getRowCount()
-        const cols = this.colCount
 
-        for (let i = 0; i < rows; i++) {
+        for (let i = 0; i < this.body.childElementCount; i++) {
             const values = []
-            for (let j = 0; j < cols; j++) {
+            for (let j = 0; j < this.colCount; j++) {
                 values.push(this.getCell(i, j).innerText)
             }
             csvString = csvString + values.join(", ") + "\n"
@@ -159,9 +157,8 @@ class EasyTable {
     saveToJSON = () => {
 
         let objList = []
-        const rows = this.getRowCount()
 
-        for (let i = 0; i < rows; i++) {
+        for (let i = 0; i < this.rowCount; i++) {
             const obj = {}
             for (let j = 0; j < this.colCount; j++) {
                 obj[this.columns[j]] = this.getCell(i, j).innerText.trim()
@@ -196,6 +193,10 @@ class EasyTable {
         container.appendChild(_createText(colHeader))
 
         return headerCell
+    }
+
+    getColCount = () => {
+        return this.colCount
     }
 
     /**
@@ -267,9 +268,13 @@ class EasyTable {
         // Making search bar span the new column.
         if (this.searchEnabled) this.input.parentElement.parentElement.setAttribute("colspan", this.colCount)
         // Making the pagination tray span the new column.
-        if (this.paginateEnabled) this.footer.children[0].parentElement.setAttribute("colspan", this.colCount)
+        if (this.paginateEnabled) this.footer.children[0].setAttribute("colspan", this.colCount)
 
         return true
+    }
+
+    getRowCount = () => {
+        return this.body.childElementCount
     }
 
     /** Methods for Rows (CRUD)*/
@@ -506,7 +511,6 @@ class EasyTable {
         headerCells.forEach(header => {
             // Necessary to adjust the new buttons aestheticaly.
             header.children[0].style.cssText = "display: flex; align-items: center; justify-content: space-between;"
-            console.log(header)
             this._addSortButtons(header.children[0])
         })
     }

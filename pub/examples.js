@@ -92,7 +92,6 @@ for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
         const cell = step3.getCell(i, j)
         cell.ondblclick = () => {
-            cell.style.cssText = "background-color: none;"
             if (j == 0) {
                 cell.innerText = parseInt(cell.innerText) + 1
             }
