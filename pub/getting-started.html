@@ -58,21 +58,14 @@
             <h2>Using the EASYTable Libary</h2>
             <p>
                 First, we must get the EASYTable library. To get started, just
-                paste the following script tag in your HTML file. Thats it! Now
+                paste the following <span class="option">script</span> tag in
+                your HTML file. Thats it! Now
                 we can go ahead and use the library to create awesome tables!
             </p>
             <p class="code">
                 &lt;script defer type="text/javascript"
                 src='EasyTable.js'&gt;&lt;/script&gt;
             </p>
-            <!-- <p>If you wish to use one of the three default styles packaged with
-                the libary, you must also incude a tag
-                to
-                get
-                the corresponding stylesheet.</p>
-            <p class="code">
-                &lt;link rel="stylesheet" href="EasyTable/EasyTable.css"&gt;
-            </p> -->
         </div>
 
 
@@ -82,14 +75,20 @@
             <p>
                 To create a new table, we call the constructor and pass in the
                 following arguments: name of table, id of
-                parent,
-                column headers, defaultSearch, and defaultStyle.
+                parent, and an options object-literal, set with the following
+                attributes:
+                <span class="option">columns</span>, <span
+                    class="option">defaultSearch</span>, and <span
+                    class="option">defaultStyle</span>.
             </p>
             <p>
                 Using the constructor below, we will create an empty table with
-                the headers "Model", "Brand", and "Year".
+                the headers <span class="option">"Model"</span>, <span
+                    class="option">"Brand"</span>, and <span
+                    class="option">"Year</span>.
                 This table will be appended to the HTML element with id
-                <strong>"main"</strong>, and will use default style 3.
+                <span class="option">main</span>, and will use default style
+                <span class="option">1</span>.
                 Additionally, it will have a library-provided default search
                 bar, which lets users search the rows of the table.
                 Feel free to try it out in later examples.
@@ -98,7 +97,7 @@
                 const myTable = new EasyTable("myTable", "main", { <br>
                 &emsp;&emsp;&emsp; columns: ['Model', 'Brand', 'Year'], <br>
                 &emsp;&emsp;&emsp; defaultSearch: true, <br>
-                &emsp;&emsp;&emsp; defaultStyle: 2, <br>
+                &emsp;&emsp;&emsp; defaultStyle: 1, <br>
                 }
             </p>
 
@@ -113,13 +112,16 @@
             <h2>Entering Data</h2>
 
             <p>
-                Adding new data is very simple. EASYTable provides multiple
+                Adding new data is very simple, as EASYTable provides multiple
                 methods for adding new data. For a detailed list, please visit
                 the docs.
-                Here, we call the .appendRow() method to append a few rows to
-                the end of the table. This method only has one argument; an
-                array of values. Note that number of elements in the array must
-                match the number of columns; it won't be inserted otherwise.
+            </p>
+            <p>
+                Here, we call the <span class="option">.appendRow()</span>
+                method to append a few rows to the end of the table. This method
+                only has one argument; an array of values. Note that number of
+                elements in the array must match the number of columns; it won't
+                be inserted otherwise.
             </p>
 
             <p><strong>Appending Some Rows</strong></p>
@@ -136,6 +138,18 @@
 
             <p><strong>Resulting Table</strong></p>
             <div id="step2Table" class="step-table"></div>
+
+            <p>Here, why don't you try adding some data? Behind the scenes, I
+                have set the <span class="option">onclick()</span> callback of
+                the submit button to the <span
+                    class="option">.appendRow()</span> method.</p>
+            <form id="add_rows">
+                <label for="model">Model</label> <input id="model" type="text">
+                <label for="brand">Brand</label> <input id="brand" type="text">
+                <label for="year">Year</label> <input id="year" type="text">
+                <input id="add_rows_submit" class="input-submit" type="submit"
+                    value="Submit">
+            </form>
         </div>
 
 
@@ -149,9 +163,13 @@
                 tables at the granularity of rows OR cells. Realisticaly, these
                 methods would be used to update specific cells/rows
                 based on certain user interactions, and not to fix spelling
-                mistakes. Here, I choose to apply the .setCell() method to fix
-                the error. This method takes 3 parameters; index of row, index
-                of column, and the data to be set in the specified cell.
+                mistakes. Here, I choose to employ the <span
+                    class="option">.setCell()</span> method to fix
+                the error. This method takes 3 parameters; index of <span
+                    class="option">row</span>, index of <span
+                    class="option">column</span>, and the <span
+                    class="option">data</span> to be set in
+                the specified cell.
             </p>
 
             <p><strong>Updating the Cell</strong></p>
@@ -164,8 +182,10 @@
             <h3>Removing Data</h3>
             <p>
                 You know what, I no longer want the Model-T in our table; its
-                waaaaaay too old! To delete a row, call the .deleteRow() method,
-                which only takes in one argument; the index of the row we wish
+                waaaaaay too old! To delete a row, call the <span
+                    class="option">.deleteRow()</span> method,
+                which only takes in one argument; the index of the <span
+                    class="option">row</span> we wish
                 to delete. Conviently, this method returns a boolean value that
                 indicates whether the operation was successful or not. We can
                 use it to error check our code, but its not necessary here.
@@ -188,9 +208,12 @@
                 operations, such as creating tables, and adding, updating, and
                 removing data. Before you move on, however, I'd like to show you
                 one more basic but powerful feature: loading data-sets.
-                EASYTable currently supports two formats; CSV and JSON. That
+                EASYTable currently supports two formats; <span
+                    class="option">CSV</span> and <span
+                    class="option">JSON</span>. That
                 means if you have tabular data in either of these formats, you
-                can use the built-in methods to quickly load them into a table.
+                can use the built-in methods to quickly load them into an
+                instance of EASYtable.
             </p>
             <p>
                 Note that EASYTable can only transform data from these formats;
@@ -198,11 +221,16 @@
                 desired source (API call / database / local file).
             </p>
             <p>
-                To load a CSV data set, first get the data, then call the
-                .loadFromCSV() method; this will read the provided data, and
-                transform it into a table. Similarly, to load a JSON set, call
-                .loadFromJSON(). The best part about these methods is that you
-                can call them anytime, not just immidiately after instantiation.
+                To load a <span class="option">CSV</span> data set, first get
+                the data, then call the
+                <span class="option">.loadFromCSV()</span> method; this will
+                read the provided data, and
+                transform it into a table. Similarly, to load a <span
+                    class="option">JSON</span> data-set, call
+                <span class="option">.loadFromJSON()</span> . The best part
+                about these methods is that you
+                can call them anytime, and not just immidiately after
+                instantiation.
             </p>
 
             <p><strong>Loading CSV</strong></p>
@@ -217,8 +245,11 @@
 
             <p><strong>Loading JSON</strong></p>
             <p class="code">
-                const json = "{ "Model": "Rogue", "Brand": "Nissan", "Year":
-                "2014"}" <br>
+                const json = `[{
+                "Model": "Rogue",
+                "Brand": "Nissan",
+                "Year": "2014"
+                }]` <br>
                 myTable.loadFromJSON(json) <br>
             </p>
 

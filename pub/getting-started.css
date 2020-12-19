@@ -133,6 +133,13 @@ li:hover{
     line-height: 1.5rem;
 }
 
+.method {
+    padding: 5px 10px;
+    color:  white;
+    width: fit-content;
+    background-color:#007c78d3;
+}
+
 .option {
     display: inline;
     margin-left: auto;
@@ -165,4 +172,28 @@ li:hover{
 .subsec {
     width: 90%;
     margin: auto;
+}
+
+form {
+    display: flex;
+    justify-items: center;
+    justify-content: space-between;
+    margin: auto;
+    width: fit-content;
+    padding: 2.5px 5px;
+}
+
+label {
+    background-color: #007c77;   
+    padding: 2.5px 5px;
+    color: white
+}
+
+input {
+    width: 20%;
+}
+
+.input-submit {
+    width: fit-content;
+    padding:2.5px 5px;
 }

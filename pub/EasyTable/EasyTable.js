@@ -256,7 +256,7 @@ class EasyTable {
     /**
      * @param {Integer} i                       Index of the desired row.
      * @param {Array} data                      Array of data to be set in the row at index i.
-     * @returns {Boolean}    Returns true on success, false on error.
+     * @returns {Boolean}                       Returns true on success, false on error.
      */
     setRow = (i, data) => {
 
@@ -305,14 +305,14 @@ class EasyTable {
     }
 
     /**
-     * @returns {HTMLTableRowElement | Null}    Returns true if successful, null otherwise.
+     * @returns {Boolean | Null}    Returns true if successful, null otherwise.
      */
     popRow = () => {
         return this.deleteRow(this.body.childElementCount - 1)
     }
 
     /**
-     * @param {Integer} i                       Index of the row to delete.
+     * @param {Integer} i           Index of the row to delete.
      * @returns {Boolean | Null}    Returns true if successful, null otherwise.
      */
     deleteRow = (i) => {
@@ -347,6 +347,7 @@ class EasyTable {
      * @param {Integer} row     Row of desired cell.
      * @param {Integer} col     Column of desired cell.
      * @param {Any} data        Data be set in specified cell.
+     * @returns {Boolean}       True on success, false otherwise.
      */
     setCell = (row, col, data) => {
 
@@ -599,6 +600,9 @@ class EasyTable {
      * Displays the previous page of the table.
      */
     prevPage = () => {
+        if (!this.paginateEnabled) {
+            return
+        }
         this.currPage -= 1
         if (this.currPage < 1) {
             this.currPage = Math.max(Math.ceil(this.body.childElementCount / this.rowsPerPage), 1)
@@ -610,6 +614,9 @@ class EasyTable {
      * Displays the next page of the table.
      */
     nextPage = () => {
+        if (!this.paginateEnabled) {
+            return
+        }
         this.currPage += 1
         if (this.currPage > Math.ceil(this.body.childElementCount / this.rowsPerPage)) {
             this.currPage = 1

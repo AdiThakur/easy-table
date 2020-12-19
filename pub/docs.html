@@ -32,7 +32,7 @@
     <div id="main">
 
         <div class="step">
-            <h1>Welcome to EASYDocs</h1>
+            <h1>EASYDocs</h1>
             <p>
                 Here you will find the complete and detailed list of features
                 and functionalities offered by the EASYTable libary. Please
@@ -42,6 +42,7 @@
             </p>
         </div>
 
+        <!-- Constructor -->
         <div class="step">
             <h1>Constructor</h1>
             <h3>Syntax</h3>
@@ -100,7 +101,7 @@
                     <span> [optional]</span>
                 </p>
                 <p>
-                    String containing inline-css.
+                    String containing inline-css to set the style of the table.
                 </p>
 
                 <p>
@@ -113,19 +114,19 @@
                 </p>
                 <div class="subsec">
                     <p>
-                        <span class="option"> perPage</span>
+                        <span class="option">perPage</span>
                     </p>
                     <p>
-                        Number of rows per page.
+                        Number of rows per page. Must be set to a positive
+                        integer to enable the pagination feature.
                     </p>
                     <p>
-                        <span class="option"> default</span>
+                        <span class="option">default</span>
                     </p>
                     <p>
                         Boolean to enable/disable the default buttons for
                         navigating the pages
-                        of the table. If set to <span
-                            class="option">false</span>, you must explicitly
+                        of the table. If not specified, you must explicitly
                         call the <span class="option">.prevPage()</span> and
                         <span class="option">.nextPage()</span> methods to
                         enable navigation between the pages of the table.
@@ -137,8 +138,8 @@
                     <span>[optional]</span>
                 </p>
                 <p>
-                    Boolean to enable/disable the default search bar. If set to
-                    <span class="option">false</span>, you must explicitly
+                    Boolean to enable/disable the default search bar. If not
+                    specified, you must explicitly
                     set the <span class="option">.search()</span> method as a
                     callback to a button-click event (or some alternative) to
                     enable searching.
@@ -150,8 +151,7 @@
                 </p>
                 <p>
                     Boolean to enable/disable the default sorting buttons. If
-                    set to
-                    <span class="option">false</span>, you must explicitly
+                    not specified, you must explicitly
                     set the <span class="option">.sort()</span> method as a
                     callback to a button-click event (or some alternative) to
                     enable sorting.
@@ -181,9 +181,9 @@
         <!-- Loading Data-Sets-->
         <div class="step">
 
-            <h1>Loading Data-Sets</h1>
+            <h2>Loading Data-Sets</h2>
 
-            <h2>loadFromCSV()</h2>
+            <h2 class="method">loadFromCSV()</h2>
 
             <h3>Syntax</h3>
             <p class="code">
@@ -195,14 +195,14 @@
             <p>String containing data in CSV format. Note that the corresponding
                 columns must be set during instantiation; <span
                     class="option">.loadFromCSV()</span> doesn't
-                set the columns based on data from <span
+                set the columns based on data read from <span
                     class="option">csvString</span> </p>
 
             <h3>Return</h3>
             <p><span class="option">true</span> on success, <span
                     class="option">false</span> otherwise.</p>
 
-            <h2>loadFromJSON()</h2>
+            <h2 class="method">loadFromJSON()</h2>
 
             <h3>Syntax</h3>
             <p class="code">
@@ -215,7 +215,7 @@
                 corresponding
                 columns must be set during instantiation; <span
                     class="option">.loadFromJSON()</span> doesn't
-                set the columns based on data from <span
+                set the columns based on data read from <span
                     class="option">jsonString</span> </p>
 
             <h3>Return</h3>
@@ -226,9 +226,10 @@
         <!-- Row Methods -->
         <div class="step">
 
-            <h1>Row Methods</h1>
+            <h2>Row Methods</h2>
 
-            <h2>getRow()</h2>
+            <h2 class="method">getRow()</h2>
+            <p>Gets and returns a row at the desired index.</p>
 
             <h3>Syntax</h3>
             <p class="code">
@@ -246,31 +247,433 @@
                 <span class="option">null</span> otherwise.
             </p>
 
+            <!-- setRow -->
 
-            <h2>setRow()</h2>
+            <h2 class="method">setRow()</h2>
+            <p>Modifies all of the cells of a given row.</p>
 
             <h3>Syntax</h3>
             <p class="code">
-                myTable.setRow(i, data)
+                myTable.setRow(i, cells)
             </p>
             <h3>Parameters</h3>
 
             <h4><span class="param">i</span></h4>
             <p>Index of the desired row.</p>
-            <h4><span class="param">data</span></h4>
+            <h4><span class="param">cells</span></h4>
             <p>
-                Array containing the data to be set in the cells of the row at
+                Array of data to be set in the cells of the row at
                 index <span class="option">i</span>. Note that <span
-                    class="option">data.length</span> must match the number of
-                columns.
+                    class="option">cells.length</span> must match the number of
+                columns for this call to be successful.
             </p>
 
             <h3>Return</h3>
             <p><span class="option">true</span> on success, <span
-                    class="option">false</span> otherwise.</p>
+                    class="option">false</span> otherwise.
+            </p>
+
+            <!-- appendRow -->
+
+            <h2 class="method">appendRow()</h2>
+            <p>Appends a new row to the end of the table.</p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.appendRow(cells)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">cells</span></h4>
+            <p>
+                Array of data to be set in the cells of the row. Note that <span
+                    class="option">cells.length</span> must match the number of
+                columns for this call to be successful.
+            </p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
+
+            <!-- insertRow -->
+
+            <h2 class="method">insertRow()</h2>
+            <p>Inserts a new row at the desired index.</p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.appendRow(cells)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">i</span></h4>
+            <p>
+                The index at which to insert the new row.
+            </p>
+
+            <h4><span class="param">cells</span></h4>
+            <p>
+                Array of data to be set in the cells of the row at
+                index <span class="option">i</span>. Note that <span
+                    class="option">cells.length</span> must match the number of
+                columns for this call to be successful.
+            </p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
+
+            <!-- popRow -->
+
+            <h2 class="method">popRow()</h2>
+            <p>Delete the last row in the table.</p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.popRow()
+            </p>
+
+            <h3>Parameters</h3>
+            <p>None</p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
+
+            <!-- deleteRow -->
+
+            <h2 class="method">deleteRow()</h2>
+            <p>Delete the i'th row from the table.</p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.deleteRow(i)
+            </p>
+
+            <h3>Parameters</h3>
+            <h4><span class="param">i</span></h4>
+            <p>
+                Index of the row to be deleted.
+            </p>
+
+            <h3>Return</h3>
+            <p><span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
 
         </div>
 
+        <!-- Cell Methods -->
+        <div class="step">
+
+            <h2>Cell Methods</h2>
+
+            <!-- getCell -->
+
+            <h2 class="method">getCell()</h2>
+            <p>Gets the cell at the position <span class="option">(row,
+                    col).</span></p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.getCell(row, col)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">row</span></h4>
+            <p>Index of the row of the desired cell.</p>
+
+            <h4><span class="param">col</span></h4>
+            <p>Index of the column of the desired cell.</p>
+
+            <h3>Return</h3>
+            <p>
+                The <span class="option">HTMLTableCellElement</span> at position
+                <span class="option">(row,col)</span> on success, <span
+                    class="option">null</span> otherwise.
+            </p>
+
+            <!-- setCell -->
+
+            <h2 class="method">setCell()</h2>
+            <p>Set the value of the cell at the position <span
+                    class="option">(row,
+                    col)</span> to <span class="option">data</span>.</p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.setCell(row, col, data)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">row</span></h4>
+            <p>Index of the row of the desired cell.</p>
+
+            <h4><span class="param">col</span></h4>
+            <p>Index of the column of the desired cell.</p>
+
+            <h4><span class="param">data</span></h4>
+            <p>Data to set in the new cell.</p>
+
+            <h3>Return</h3>
+            <p>
+                <span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
+
+        </div>
+
+        <!-- Column Methods -->
+        <div class="step">
+
+            <h2>Column Methods</h2>
+
+            <!-- appendCol -->
+
+            <h2 class="method">appendCol()</h2>
+            <p>Appends a new column to the end of the table. </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.appendCol(header, defaultData, dataList)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">header</span></h4>
+            <p>Header of the new column.</p>
+
+            <h4><span class="param">defaultData</span></h4>
+            <p>
+                If specified, and <span class="option">dataList</span> is set
+                to <span class="option">null</span>, the cells of the new column
+                will all be set to <span class="option">defaultData</span>.
+            </p>
+
+            <h4><span class="param">dataList</span></h4>
+            <p>
+                Array of data. If specified, and <span
+                    class="option">defaultData</span> is set
+                to <span class="option">null</span>, the cells of the new column
+                will be set to the corresponding element of <span
+                    class="option">dataList</span>. Note that <span
+                    class="option">dataList.length</span> must match the number
+                of rows in the table (at time of insertion).
+            </p>
+
+            <h3>Return</h3>
+            <p>
+                <span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
+
+            <!-- insertCol -->
+
+            <h2 class="method">insertCol()</h2>
+            <p>Inserts a new column at the desired index. </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.insertCol(i, header, defaultData, dataList)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">i</span></h4>
+            <p>The index at which to insert the new column.</p>
+
+            <h4><span class="param">header</span></h4>
+            <p>Header of the new column.</p>
+
+            <h4><span class="param">defaultData</span></h4>
+            <p>
+                If specified, and <span class="option">dataList</span> is set
+                to <span class="option">null</span>, the cells of the new column
+                will all be set to <span class="option">defaultData</span>.
+            </p>
+
+            <h4><span class="param">dataList</span></h4>
+            <p>
+                Array of data. If specified, and <span
+                    class="option">defaultData</span> is set
+                to <span class="option">null</span>, the cells of the new column
+                will be set to the corresponding element of <span
+                    class="option">dataList</span>. Note that <span
+                    class="option">dataList.length</span> must match the number
+                of rows in the table (at time of insertion).
+            </p>
+
+            <h3>Return</h3>
+            <p>
+                <span class="option">true</span> on success, <span
+                    class="option">false</span> otherwise.
+            </p>
+        </div>
+
+        <!-- Search Methods -->
+        <div class="step">
+            <h2>Searching</h2>
+
+            <!-- search -->
+
+            <h2 class="method">search()</h2>
+            <p>
+                Search and display the rows of the table that match the
+                specified
+                query. Note that this method is implicitly called whenever the
+                default search button is clicked (if the <span
+                    class="option">defaultSearch</span> option is enabled during
+                instantiation).
+            </p>
+            <p>
+                If <span class="option">defaultSearch</span>
+                is not set, you must explicitly call the <span
+                    class="option">.search()</span> method to enable searching,
+                probably as the <span class="option">onclick()</span> callback
+                for
+                some custom element.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.search(query)
+            </p>
+            <h3>Parameters</h3>
+
+            <h4><span class="param">query</span></h4>
+            <p>String to search for.</p>
+
+            <h3>Return</h3>
+            <p>
+                <span class="option">true</span> if at least one matching row
+                was found, <span class="option">false</span> otherwise.
+            </p>
+
+            <!-- resetTable -->
+
+            <h2 class="method">resetTable()</h2>
+            <p>
+                Clear the results of the <span class="option">.search()</span>
+                method, and restore the table to its original state
+                (pre-search). Note that this method is implicitly called
+                whenever the default clear-input button is clicked (if the <span
+                    class="option">defaultSearch</span> option is enabled during
+                instantiation).
+            </p>
+            <p>
+                If <span class="option">defaultSearch</span>
+                is not set, you must explicitly call the <span
+                    class="option">.resetTable()</span> method to clear the
+                results of the search, and restore the table to its pre-search
+                state.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.resetTable()
+            </p>
+
+            <h3>Parameters</h3>
+            <p>None</p>
+
+            <h3>Return</h3>
+            <p>None</p>
+        </div>
+
+        <!-- Sort Methods -->
+        <div class="step">
+            <h2>Sorting</h2>
+
+            <!-- sort -->
+
+            <h2 class="method">sort()</h2>
+            <p>
+                Sort the rows of the table by the values in a specified column.
+            </p>
+            <p>
+                If <span class="option">defaultSort</span>
+                is not set during instantiation, you must explicitly call the
+                <span class="option">.sort()</span> method to enable sorting,
+                probably as the <span class="option">onclick()</span> callbacks
+                for some custom elements.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.sort(col, direction)
+            </p>
+
+            <h3>Parameters</h3>
+
+            <h4><span class="param">col</span></h4>
+            <p>Index of the column to sort the rows by.</p>
+
+            <h4><span class="param">direction</span></h4>
+            <p>
+                <span class="option">1</span> to sort the table in ascending
+                order, <span class="option">-1</span> for descending order.
+            </p>
+
+            <h3>Return</h3>
+            <p>None</p>
+        </div>
+
+        <!-- Pagination Methods -->
+        <div class="step">
+            <h2>Pagination</h2>
+
+            <p>Note that pagination must be enabled for the following
+                methods to succeed; the <span
+                    class="option">paginate.perPage</span> option must be set
+                during instantiation.
+            </p>
+            <p>
+                If the <span class="option">default</span> value of the <span
+                    class="option">paginate</span> option is not set during
+                instantiation, you must explicitly call the
+                <span class="option">.prevPage()</span> and <span
+                    class="option">.nextPage()</span> methods to enable
+                navigation between the pages of the table. This will probably be
+                done by setting the <span class="option">onclick()</span>
+                callbacks
+                for some custom elements.
+            </p>
+
+            <!-- prevpage -->
+
+            <h2 class="method">prevPage()</h2>
+            <p>
+                Navigate to the previous page of the table.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.prevPage()
+            </p>
+
+            <h3>Parameters</h3>
+            <p>None</p>
+
+            <h3>Return</h3>
+            <p>None</p>
+
+            <h2 class="method">nextPage()</h2>
+            <p>
+                Navigate to the next page of the table.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.nextPage()
+            </p>
+
+            <h3>Parameters</h3>
+            <p>None</p>
+
+            <h3>Return</h3>
+            <p>None</p>
+        </div>
 
     </div>
 </body>

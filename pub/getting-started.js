@@ -23,6 +23,22 @@ step2.appendRow(["Model-T", "Ford", "1102"])
 step2.appendRow(["Enzo", "Ferrari", "1996"])
 step2.appendRow(["458", "Ferrari", "1996"])
 
+const submit = document.querySelector("#add_rows_submit")
+const enterData = (event) => {
+    event.preventDefault()
+    const model = document.querySelector("#model").value
+    const brand = document.querySelector("#brand").value
+    const year = document.querySelector("#year").value
+    if (!model || !brand || !year) {
+        alert("Please populate all fields!")
+        return
+    }
+    step2.appendRow([model, brand, year])
+    console.log([model, brand, year])
+    document.querySelector("#add_rows").reset()
+}
+submit.onclick = enterData
+
 // Setting cell.
 const step3 = new EasyTable("step3", "step3Table", {
     columns: ['Model', 'Brand', 'Year'],
