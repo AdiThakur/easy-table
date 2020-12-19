@@ -73,20 +73,8 @@ step22.appendRow(["Model-T", "Ford", "1102"])
 step22.insertRow(1, ["Enzo", "Ferrari", "1996"])
 step22.insertRow(1, ["458", "Ferrari", "1996"])
 
-
-
-// step22.insertCol(3, "Ratings", null, [
-//     "4/10",
-//     "9/10",
-//     "10/10",
-//     "3/10",
-//     "4/10",
-//     "7/10",
-//     "2/10",
-//     "1/10"
-// ])
-
-step22.appendCol("Purchases", null, [
+step22.appendCol("Purchases", 0, null)
+step22.insertCol(3, "Ratings", null, [
     "4/10",
     "9/10",
     "10/10",
@@ -96,8 +84,6 @@ step22.appendCol("Purchases", null, [
     "2/10",
     "1/10"
 ])
-
-step22.appendCol("Ratings", "Purchasessssssssssssssssssssss", null)
 
 
 const step3 = new EasyTable("step3", "step3Table", {
@@ -142,16 +128,17 @@ step4.setCell(5, 0, "Mustang")
 
 step4.popRow()
 
+
 const step5 = new EasyTable("step5", "step5Table", {
     columns: ['Model', 'Brand', 'Year'],
-    colNumbering: true,
-    enableSearch: true,
-    enableSort: true,
     defaultStyle: 2,
     // stylesheet: "EasyTable/EasyTable.css",
-    cssText: null,
-    sort: true,
-    paginate: 4
+    defaultSearch: true,
+    defaultSort: true,
+    paginate: {
+        perPage: 5,
+        default: true
+    }
 })
 step5.appendRow(["Camry", "Toyota", "2000"])
 step5.appendRow(["Civic", "Honda", "2005"])
@@ -180,15 +167,7 @@ step5.insertCol(3, "Rating", null, [
 
 //TODO: 
 
-// FIXES
-
-// 1. Fix styling for headers and shit.
-// 2. Factor out code to create col headers (insertCol appends a text node, while setColumns creates a text node within a DIV)
-// 3. Encapsulate the results of search so that paginate and sort work JUST for the results, and not entire table (maybe create a new tbody, populate with search results, and replace the current table.body with the new tbody elem.)
-
-// 4. Grant users access to _search, _sort, and _next/_prevPage functions (Give them an option to use the default elements, or use their own custom elements, with the provided functions set as callbacks)
-
-// 5. Package code like mark showed in circle generator example.
+// 1. Package code like mark showed in circle generator example.
 
 // Features
 

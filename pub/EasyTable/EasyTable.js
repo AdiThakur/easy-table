@@ -32,12 +32,12 @@ class EasyTable {
         this.shadow.appendChild(this.table)
 
         // Initialize search functionality.
-        if (options.enableSearch) {
+        if (options.defaultSearch) {
             this.searchEnabled = true
-            this._addInputFields()
+            this._initializeSearchBar()
         }
 
-        // Set-up table's style.
+        // Initialize table's style.
         if (options.stylesheet) {
             const link = _createElem('link')
             link.setAttribute('rel', 'stylesheet')
@@ -55,13 +55,17 @@ class EasyTable {
         // Initialize pagination.
         if (options.paginate) {
             this.paginateEnabled = true
-            this.rowsPerPage = options.paginate
+            this.rowsPerPage = options.paginate.perPage
             this.currPage = 1
-            this._addPaginationFields()
+            // Create default page changing buttons.
+            if (options.paginate.default) {
+                this._addPaginationFields()
+            }
+            this._paginate()
         }
 
         // Initialize sorting.
-        if (options.sort) {
+        if (options.defaultSort) {
             this.sortEnabled = true
             this._initializeSort()
         }
@@ -82,152 +86,6 @@ class EasyTable {
         }
     }
 
-    /** Sorting Functionality. */
-
-    // Set-up sorting buttons for column headers at instantiation.
-    _initializeSort = () => {
-        const headerCells = Array.from(this.header.children[0].children)
-        headerCells.forEach(header => {
-            this._addSortButtons(header.children[0])
-        })
-    }
-
-    // Add sorting buttons to given cell.
-    _addSortButtons = (newHeaderCell) => {
-
-        const container = _createElem('div')
-        newHeaderCell.appendChild(container)
-        container.style.cssText = "margin-left: 5px;"
-
-        const createSortButton = (direction) => {
-            const sortButton = _createElem('button')
-            container.appendChild(sortButton)
-            sortButton.setAttribute("class", "sortButton")
-            sortButton.style.cssText = "display: block; margin: 0px; width: 45px; font-size: 12px"
-            sortButton.innerText = direction == 1 ? "ASC" : "DSC"
-            sortButton.onclick = direction == 1 ? this._sortAscending : this._sortDescending
-        }
-
-        createSortButton(1)
-        createSortButton(-1)
-    }
-
-    // Callback for ascending sort button.
-    _sortAscending = (event) => {
-        this._sort(event, 1)
-    }
-
-    // Callback for descending sort button.
-    _sortDescending = (event) => {
-        this._sort(event, -1)
-    }
-
-    // Simple sorting algorithm.
-    _sort = (event, direction) => {
-
-        // Find index of col to be sorted.
-        const header = event.target.parentElement.parentElement.innerText.split("\n")[0]
-        const col = this.columns.indexOf(header)
-
-        const swap = (elem1, elem2) => {
-            elem1.parentNode.insertBefore(elem2, elem1)
-        }
-        // Good ole bubble-sort.
-        for (let i = 0; i < this.body.childElementCount; i++) {
-            for (let j = 0; j < this.body.childElementCount - i - 1; j++) {
-
-                const currCell = this.body.children[j].children[col].innerText.toLowerCase()
-                const nextCell = this.body.children[j + 1].children[col].innerText.toLowerCase()
-
-                if (direction == 1) {
-                    if (currCell > nextCell) {
-                        swap(this.body.children[j], this.body.children[j + 1])
-                    }
-                } else if (direction == -1) {
-                    if (currCell < nextCell) {
-                        swap(this.body.children[j], this.body.children[j + 1])
-                    }
-                }
-            }
-        }
-        // Pagiante the sorted rows.
-        if (this.paginateEnabled) {
-            this._paginate()
-        }
-    }
-
-    /** Pagination Functionality and Helpers */
-
-    // Callback for previous page button.
-    _prevPage = () => {
-        this.currPage -= 1
-        if (this.currPage < 1) {
-            this.currPage = Math.ceil(this.body.childElementCount / this.rowsPerPage)
-        }
-        this._paginate()
-    }
-
-    // Callback for next page button.
-    _nextPage = () => {
-        this.currPage += 1
-        if (this.currPage > Math.ceil(this.body.childElementCount / this.rowsPerPage)) {
-            this.currPage = 1
-        }
-        this._paginate()
-    }
-
-    // Split the displayed table into set of pages.
-    _paginate = () => {
-
-        this.pageNumberDisplay.innerText = this.currPage
-
-        const firstRowIndex = (this.currPage - 1) * this.rowsPerPage
-        const lastRowIndex = firstRowIndex + this.rowsPerPage - 1
-        const rowCount = Math.min(this.body.childElementCount, this.body.childElementCount)
-
-        console.log(`Row Count: ${rowCount}`)
-        console.log(`First: ${firstRowIndex} Last: ${lastRowIndex}`)
-
-        for (let i = 0; i < rowCount; i++) {
-            // Hide off-page rows.
-            if (i < firstRowIndex || i > lastRowIndex) {
-                this.body.children[i].style.display = "none"
-            } else {
-                this.body.children[i].style.display = ""
-            }
-        }
-    }
-
-    // Add buttons to navigate the pages of the table.
-    _addPaginationFields = () => {
-
-        // Houses the prev and next buttons, and the page number.
-        const cell = _createElem('td')
-        this.footer.appendChild(cell)
-        cell.setAttribute("colspan", this.colCount)
-
-        const paginationTray = _createElem('div')
-        cell.appendChild(paginationTray)
-        paginationTray.style.cssText = "width: fit-content; margin: auto; padding: 5px;"
-
-        const prevButton = _createElem('button')
-        paginationTray.appendChild(prevButton)
-        prevButton.innerText = "Prev"
-        prevButton.onclick = this._prevPage
-
-        const pageNumberDisplay = _createElem("span")
-        paginationTray.appendChild(pageNumberDisplay)
-        pageNumberDisplay.style.cssText = "padding: 0px 10px;"
-        pageNumberDisplay.innerText = "0"
-        // Store reference to update later.
-        this.pageNumberDisplay = pageNumberDisplay
-
-        const nextButton = _createElem('button')
-        paginationTray.appendChild(nextButton)
-        nextButton.innerText = "Next"
-        nextButton.onclick = this._nextPage
-    }
-
     /** Methods for Columns. */
 
     // Initalize column headers provided during instantiation.
@@ -238,15 +96,22 @@ class EasyTable {
         headerRow.style.cssText = "text-align: center"
 
         this.columns.forEach(colHeader => {
+            headerRow.appendChild(this._createHeader(colHeader))
+        })
+    }
 
-            const headerCell = _createElem('td')
-            headerRow.appendChild(headerCell)
+    // Create and return a new header with proper styles.
+    _createHeader = (colHeader) => {
 
-            const container = _createElem('div')
-            headerCell.appendChild(container)
-            container.setAttribute("class", "headerCell")
-            container.appendChild(_createText(colHeader))
-        });
+        const headerCell = _createElem('td')
+
+        const container = _createElem('div')
+        headerCell.appendChild(container)
+        container.setAttribute("class", "headerCell")
+        container.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding-left: 5px;"
+        container.appendChild(_createText(colHeader))
+
+        return headerCell
     }
 
     /**
@@ -282,9 +147,7 @@ class EasyTable {
         // Create and insert new header cell.
         this.columns.splice(i, 0, header)
 
-        const headerCell = _createElem('td')
-        headerCell.setAttribute("class", "headerCell")
-        headerCell.appendChild(_createText(header))
+        const headerCell = this._createHeader(header)
 
         const headerRow = this.header.children[0]
         if (i == this.colCount) {
@@ -328,6 +191,36 @@ class EasyTable {
     /** Methods for Rows (CRUD)*/
 
     /**
+     * @param {Integer} i                       Index of the desired row.
+     * @returns {HTMLTableRowElement | Null}    Returns the row element at index i if it
+     *                                          exists, null otherwise.
+     */
+    getRow = (i) => {
+
+        if (!_valid_index(i, this.body.childElementCount)) {
+            return null
+        }
+        return this.body.children[i]
+    }
+
+    /**
+     * @param {Integer} i                       Index of the desired row.
+     * @param {Array} data                      Array of data to be set in the row at index i.
+     * @returns {HTMLTableRowElement | Null}    Returns true on success, false on error.
+     */
+    setRow = (i, data) => {
+
+        if (!_valid_index(i, this.body.childElementCount) || !_valid_cells(data.length, this.colCount)) {
+            return false
+        }
+        let row = this.body.children[i]
+        for (let j = 0; j < this.colCount; j++) {
+            row.children[j].innerHTML = data[j]
+        }
+        return true
+    }
+
+    /**
      * @param {Array} cells     Array of data to be set in new row.
      * @returns {Boolean}       True on success, false on error.
      */
@@ -358,36 +251,6 @@ class EasyTable {
         // Ensure that only on-page rows are displayed.
         if (this.paginateEnabled) this._paginate()
 
-        return true
-    }
-
-    /**
-     * @param {Integer} i                       Index of the desired row.
-     * @returns {HTMLTableRowElement | Null}    Returns the row element at index i if it
-     *                                          exists, null otherwise.
-     */
-    getRow = (i) => {
-
-        if (!_valid_index(i, this.body.childElementCount)) {
-            return null
-        }
-        return this.body.children[i]
-    }
-
-    /**
-     * @param {Integer} i                       Index of the desired row.
-     * @param {Array} data                      Array of data to be set in the row at index i.
-     * @returns {HTMLTableRowElement | Null}    Returns true on success, false on error.
-     */
-    setRow = (i, data) => {
-
-        if (!_valid_index(i, this.body.childElementCount) || !_valid_cells(data.length, this.colCount)) {
-            return false
-        }
-        let row = this.body.children[i]
-        for (let j = 0; j < this.colCount; j++) {
-            row.children[j].innerHTML = data[j]
-        }
         return true
     }
 
@@ -447,7 +310,7 @@ class EasyTable {
     /** Search Functionality.*/
 
     // Creates the search bar and button.
-    _addInputFields = () => {
+    _initializeSearchBar = () => {
 
         const searchRow = _createElem('tr')
         this.header.appendChild(searchRow)
@@ -461,7 +324,7 @@ class EasyTable {
         const searchBarInput = _createElem('input')
         searchCell.appendChild(searchBarInput)
         this.input = searchBarInput
-        searchBarInput.addEventListener("search", this._resetTable)
+        searchBarInput.addEventListener("search", this.resetTable)
 
         searchBarInput.placeholder = "Search..."
         searchBarInput.setAttribute("type", "search")
@@ -473,11 +336,19 @@ class EasyTable {
 
         searchButton.style.cssText = "width: 15%; margin: 0px; padding: 0px;  box-sizing: border-box;"
         searchButton.innerText = "Search"
-        searchButton.onclick = this._search
+        searchButton.onclick = this._searchHelper
     }
 
-    // Reset table to initial state.
-    _resetTable = (e) => {
+    // Used to extract search query from the default searchbar (if enabled).
+    _searchHelper = () => {
+        const query = this.input.value.toUpperCase()
+        this.search(query)
+    }
+
+    /**
+     * Reset the table (clear the results of a search.)
+     */
+    resetTable = () => {
 
         // Reset table to show all of the original rows.
         if (this.originalBody) {
@@ -491,17 +362,20 @@ class EasyTable {
         }
     }
 
-    // Search algo; Displayed rows contain one or more cells that matches the search query.
-    _search = () => {
+    /**
+     * @param {String} query    Query to search.
+     * @returns {Boolean}       Returns true if at least one row matches the query; false otherwise.
+     */
+    search = (query) => {
 
-        const query = this.input.value.toUpperCase()
-        if (!query) return
+        if (!query) return false
 
         // Restore the table before modifying it to show results.
-        this._resetTable()
+        this.resetTable()
 
         // New tbody to store the results.
         const newBody = _createElem('tbody')
+        let found = false
 
         // Identify rows that match query.
         for (let i = 0; i < this.body.childElementCount; i++) {
@@ -516,8 +390,11 @@ class EasyTable {
             }
             if (currRowMatches) {
                 newBody.appendChild(currRow.cloneNode(true))
+                found = true
             }
         }
+        if (!found) return false
+
         // Original rows saved for later.
         this.originalBody = this.body.cloneNode(true)
         this.body.remove()
@@ -528,6 +405,158 @@ class EasyTable {
 
         // Paginate the results.
         if (this.paginateEnabled) this._paginate()
+        return true
+    }
+
+    /** Sorting Functionality. */
+
+    // Set-up sorting buttons for column headers at instantiation.
+    _initializeSort = () => {
+        const headerCells = Array.from(this.header.children[0].children)
+        headerCells.forEach(header => {
+            this._addSortButtons(header.children[0])
+        })
+    }
+
+    // Add sorting buttons to given header cell.
+    _addSortButtons = (newHeaderCell) => {
+
+        const container = _createElem('div')
+        newHeaderCell.appendChild(container)
+        container.style.cssText = "margin-left: 5px;"
+
+        const createSortButton = (direction) => {
+            const sortButton = _createElem('button')
+            container.appendChild(sortButton)
+            sortButton.setAttribute("class", "sortButton")
+            sortButton.style.cssText = "display: block; margin: 0px; width: 45px; font-size: 12px"
+            sortButton.innerText = direction == 1 ? "ASC" : "DSC"
+            sortButton.onclick = direction == 1 ? this._sortAscending : this._sortDescending
+        }
+
+        createSortButton(1)
+        createSortButton(-1)
+    }
+
+    // Callback for the default ascending sort button.
+    _sortAscending = (event) => {
+        const header = event.target.parentElement.parentElement.innerText.split("\n")[0]
+        this.sort(this.columns.indexOf(header), 1)
+    }
+
+    // Callback for the default descending sort button.
+    _sortDescending = (event) => {
+        const header = event.target.parentElement.parentElement.innerText.split("\n")[0]
+        this.sort(this.columns.indexOf(header), -1)
+    }
+
+    /**
+     * @param {Integer} col         Index of column to sort.
+     * @param {Integer} direction   1 to specify ascending order, -1 for descending order.
+     */
+    sort = (col, direction) => {
+
+        const swap = (elem1, elem2) => {
+            elem1.parentNode.insertBefore(elem2, elem1)
+        }
+        // Good ole bubble-sort.
+        for (let i = 0; i < this.body.childElementCount; i++) {
+            for (let j = 0; j < this.body.childElementCount - i - 1; j++) {
+
+                const currCell = this.body.children[j].children[col].innerText.toLowerCase()
+                const nextCell = this.body.children[j + 1].children[col].innerText.toLowerCase()
+
+                if (direction == 1) {
+                    if (currCell > nextCell) {
+                        swap(this.body.children[j], this.body.children[j + 1])
+                    }
+                } else if (direction == -1) {
+                    if (currCell < nextCell) {
+                        swap(this.body.children[j], this.body.children[j + 1])
+                    }
+                }
+            }
+        }
+        // Paginate the sorted rows.
+        if (this.paginateEnabled) {
+            this._paginate()
+        }
+    }
+
+    /** Pagination Functionality and Helpers */
+
+    // Split the displayed table into set of pages.
+    _paginate = () => {
+
+        // Increment dispalyed page number if default buttons are enabled.
+        if (this.pageNumberDisplay) {
+            this.pageNumberDisplay.innerText = this.currPage
+        }
+
+        const firstRowIndex = (this.currPage - 1) * this.rowsPerPage
+        const lastRowIndex = firstRowIndex + this.rowsPerPage - 1
+        const rowCount = Math.min(this.body.childElementCount, this.body.childElementCount)
+
+        for (let i = 0; i < rowCount; i++) {
+            // Hide off-page rows.
+            if (i < firstRowIndex || i > lastRowIndex) {
+                this.body.children[i].style.display = "none"
+            } else {
+                this.body.children[i].style.display = ""
+            }
+        }
+    }
+
+    // Add buttons to navigate the pages of the table.
+    _addPaginationFields = () => {
+
+        // Houses the prev and next buttons, and the page number.
+        const cell = _createElem('td')
+        this.footer.appendChild(cell)
+        cell.setAttribute("colspan", this.colCount)
+
+        const paginationTray = _createElem('div')
+        cell.appendChild(paginationTray)
+        paginationTray.style.cssText = "width: fit-content; margin: auto; padding: 5px;"
+
+        const prevButton = _createElem('button')
+        paginationTray.appendChild(prevButton)
+        prevButton.innerText = "Prev"
+        prevButton.onclick = this.prevPage
+
+        const pageNumberDisplay = _createElem("span")
+        paginationTray.appendChild(pageNumberDisplay)
+        pageNumberDisplay.style.cssText = "padding: 0px 10px;"
+        pageNumberDisplay.innerText = "0"
+        // Store reference to update later.
+        this.pageNumberDisplay = pageNumberDisplay
+
+        const nextButton = _createElem('button')
+        paginationTray.appendChild(nextButton)
+        nextButton.innerText = "Next"
+        nextButton.onclick = this.nextPage
+    }
+
+    /**
+     * Displays the previous page of the table.
+     */
+    prevPage = () => {
+        this.currPage -= 1
+        if (this.currPage < 1) {
+            this.currPage = Math.ceil(this.body.childElementCount / this.rowsPerPage)
+        }
+        this._paginate()
+    }
+
+    /**
+     * Displays the next page of the table.
+     */
+    nextPage = () => {
+        this.currPage += 1
+        if (this.currPage > Math.ceil(this.body.childElementCount / this.rowsPerPage)) {
+            this.currPage = 1
+        }
+        this._paginate()
     }
 }
 
