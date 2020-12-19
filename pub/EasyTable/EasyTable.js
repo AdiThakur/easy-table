@@ -86,6 +86,58 @@ class EasyTable {
         }
     }
 
+    /** Loading from Data-sets Functionality.*/
+
+    /**
+     * @param {Array[String]} listOfCSV     Array of comma-seperated values. All elements must
+     *                                      contain <colCount> values. Must not container headers 
+     *                                      as they will be treated lik regular data.
+     */
+    loadFromCSV = (listOfCSV) => {
+
+        if (!listOfCSV || listOfCSV[0].split(",").length != this.colCount) {
+            return false
+        }
+        listOfCSV.forEach(csv => {
+            const values = csv.trim().split(",")
+            this.appendRow(values)
+        })
+        return true
+    }
+
+    /**
+     * @param {Array[String]} listOfJSON    Array of JSON strings.
+     * @returns {Boolean}                   True on success, false otherwise.
+     */
+    loadFromJSON = (listOfJSON) => {
+
+        const newRows = []
+
+        listOfJSON.forEach(json => {
+            let obj
+            try {
+                obj = JSON.parse(json)
+            } catch (error) {
+                console.warn(`EasyTable.loadFromJSON: Invalid JSON. \n Error Caught: ${error}`)
+                return false
+            }
+
+            const values = []
+            // Keys may not be in the same order as columns; arrange them accordingly.
+            Object.keys(obj).forEach(key => {
+                const col = this.columns.indexOf(key)
+                values.splice(col, 0, obj[key])
+            })
+            newRows.push(values)
+        })
+
+        // Only start insertion if all of the JSON was correctly parsed.
+        newRows.forEach(row => {
+            this.appendRow(row)
+        })
+        return true
+    }
+
     /** Methods for Columns. */
 
     // Initalize column headers provided during instantiation.
@@ -543,7 +595,7 @@ class EasyTable {
     prevPage = () => {
         this.currPage -= 1
         if (this.currPage < 1) {
-            this.currPage = Math.ceil(this.body.childElementCount / this.rowsPerPage)
+            this.currPage = Math.max(Math.ceil(this.body.childElementCount / this.rowsPerPage), 1)
         }
         this._paginate()
     }

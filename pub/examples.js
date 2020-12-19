@@ -165,12 +165,33 @@ step5.insertCol(3, "Rating", null, [
     "0.2"
 ])
 
+// const fakeCSV = [
+//     "Camry, Toyota, 2000",
+//     "Civic, Honda, 2005",
+//     "Accord, Honda, 2001"
+// ]
+// step5.loadFromCSV(fakeCSV)
+
+// const json = [
+//     `{
+//         "Year": "2000",
+//         "Model": "Camry",
+//         "Brand": "Toyota"        
+//     }`,
+//     `{
+//         "Model": "Huracan",
+//         "Year": "2015",
+//         "Brand": "Lamborghini"        
+//     }`,
+//     `{
+//         "Year": "2012",
+//         "Model": "Aventador",
+//         "Brand": "Lamborghini"        
+//     }`
+// ]
+
+// step5.loadFromJSON(json)
+
 //TODO: 
 
 // 1. Package code like mark showed in circle generator example.
-
-// Features
-
-// 1. Load from CSV/JSON
-// 2. Save to CSV/JSON
-// 3. 
