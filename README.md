@@ -11,9 +11,9 @@ Checkout the documentation here: <https://salty-cove-11433.herokuapp.com/Docs>
 For the complete demo, documentation, and more, please visit the official website.
 
 
-#### Creating your first EASYTable
+#### Creating Your First EASYTable
 
-First, you must get the EASYTable library. To get started, just paste the following tag in your HTML file. Thats it! Now you can go ahead and use the library to create awesome tables!
+Before you can use the awesome features of EASYTable, you must get the library. To get started, just paste the following tag in your HTML file. Thats it! Now you can go ahead and use the library to create awesome tables!
 
 ```
 <script defer type="text/javascript" src='EasyTable.js'></script>;
