@@ -111,6 +111,7 @@ const json = `[{
     "Year": "2014"
 }]`
 
+step6.loadFromCSV(csv)
 step6.loadFromJSON(json)
 
 // TODO; 
