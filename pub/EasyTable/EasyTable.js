@@ -158,7 +158,7 @@ class EasyTable {
 
         let objList = []
 
-        for (let i = 0; i < this.rowCount; i++) {
+        for (let i = 0; i < this.body.childElementCount; i++) {
             const obj = {}
             for (let j = 0; j < this.colCount; j++) {
                 obj[this.columns[j]] = this.getCell(i, j).innerText.trim()
@@ -273,11 +273,35 @@ class EasyTable {
         return true
     }
 
-    getRowCount = () => {
-        return this.body.childElementCount
+    /**
+     *  
+     * @param {Integer} col                             Index of desired column.
+     * @returns {Array[HTMLTableCellElement] | Null}    Returns array of cells in the specified
+     *                                                  column on sucess, null on error.
+     */
+    getCol = (col) => {
+
+        if (!_valid_index(col, this.colCount)) {
+            return null
+        }
+
+        const cells = []
+        for (let i = 0; i < this.body.childElementCount; i++) {
+            const row = this.body.children[i]
+            cells.push(row.children[col])
+        }
+        return cells
     }
 
     /** Methods for Rows (CRUD)*/
+
+    /**
+     * @returns {Integer}   Number of rows in the currently displayed table; if pagination is
+     *                      disabled, it returns ALL of the rows in the table.
+     */
+    getRowCount = () => {
+        return this.body.childElementCount
+    }
 
     /**
      * @param {Integer} i                       Index of the desired row.
@@ -380,6 +404,18 @@ class EasyTable {
             return null
         }
         return this.body.children[row].children[col]
+    }
+
+    /**
+     * @returns {Array[HTMLTableCellElement]}   Returns an array containing all cells of the table.
+     */
+    getCells = () => {
+        const cells = []
+        for (let i = 0; i < this.body.childElementCount; i++) {
+            const row = this.body.children[i]
+            cells.push(...row.children)
+        }
+        return cells
     }
 
     /**

@@ -17,23 +17,17 @@
             <h1>EASYTable</h1>
         </span>
         <ul>
-            <li>
-                <a href="/GettingStarted" style="background-color:#777;">Getting
-                    Started</a>
-            </li>
-            <li>
-                <a href="/Docs">Docs</a>
-            </li>
-            <li>
-                <a href="/Examples">Examples</a>
-            </li>
+            <li><a href="/GettingStarted" style="background-color:#777;">Getting
+                    Started</a></li>
+            <li><a href="/Docs">Docs</a></li>
+            <li><a href="/Examples">Examples</a></li>
         </ul>
     </nav>
 
     <div id="main">
         <!-- Website Header -->
         <div class="step">
-            <h2>EasyTable Demo</h1>
+            <h2>EASYTable Demo</h1>
                 <p>
                     Welcome to the EASYTable demo! In this step-by-step guide,
                     I'll demonstrate how to use the EASYTable library to quickly
@@ -42,13 +36,13 @@
                     most basic features that will help developers get started
                     quickly.
                     Please visit the documentation page for a detailed list of
-                    functionalities, and the examples page for example usages of
-                    the advanced features.
+                    functionalities, and the examples page for a demonstration
+                    of some of the more advanced features.
                 </p>
                 <p>
                     In this example, we will be creating a simple three column
-                    table that shows us
-                    the model, brand, and year of some cool cars.
+                    table that shows us the model, brand, and year of some cool
+                    cars.
                 </p>
         </div>
 
@@ -56,10 +50,10 @@
         <div class="step">
             <h2>Using the EASYTable Libary</h2>
             <p>
-                First, we must get the EASYTable library. To get started, just
+                First, we must download the EASYTable library. Then,
                 paste the following <span class="option">script</span> tag in
-                your HTML file. Thats it! Now
-                we can go ahead and use the library to create awesome tables!
+                your HTML file with the appropriate path. Thats it! Now we can
+                go ahead and use the library to create awesome tables!
             </p>
             <p class="code">
                 &lt;script defer type="text/javascript"
@@ -81,7 +75,7 @@
                     class="option">defaultStyle</span>.
             </p>
             <p>
-                Using the constructor below, we will create an empty table with
+                Using the constructor below will create an empty table with
                 the headers <span class="option">"Model"</span>, <span
                     class="option">"Brand"</span>, and <span
                     class="option">"Year</span>.
@@ -112,15 +106,16 @@
 
             <p>
                 Adding new data is very simple, as EASYTable provides multiple
-                methods for adding new data. For a detailed list, please visit
+                methods for inserting new cells, rows, and even columns. For a
+                detailed list, please visit
                 the docs.
             </p>
             <p>
                 Here, we call the <span class="option">.appendRow()</span>
                 method to append a few rows to the end of the table. This method
                 only has one argument; an array of values. Note that number of
-                elements in the array must match the number of columns; it won't
-                be inserted otherwise.
+                elements in the array must match the number of columns; the
+                insertion will fail otherwise.
             </p>
 
             <p><strong>Appending Some Rows</strong></p>
@@ -157,14 +152,14 @@
             <h2>Updating the Table</h2>
             <h3>Setting Data</h3>
             <p>
-                Woops! Looks like I mis-spelled Mustang. Luckily, EASYTable
+                Woops! Looks like I misspelled Mustang. Luckily, EASYTable
                 provides methods that allow users to update
-                tables at the granularity of rows OR cells. Realisticaly, these
-                methods would be used to update specific cells/rows
+                tables at the granularity of rows or cells. Realisticaly, these
+                methods would be used to update specific rows/cells
                 based on certain user interactions, and not to fix spelling
                 mistakes. Here, I choose to employ the <span
                     class="option">.setCell()</span> method to fix
-                the error. This method takes 3 parameters; index of <span
+                the error. It takes 3 parameters; index of <span
                     class="option">row</span>, index of <span
                     class="option">column</span>, and the <span
                     class="option">data</span> to be set in
@@ -181,7 +176,7 @@
             <h3>Removing Data</h3>
             <p>
                 You know what, I no longer want the Model-T in our table; its
-                waaaaaay too old! To delete a row, call the <span
+                too old! To delete a row, we can call the <span
                     class="option">.deleteRow()</span> method,
                 which only takes in one argument; the index of the <span
                     class="option">row</span> we wish
@@ -204,18 +199,19 @@
             <h2>Loading Data-Sets</h2>
             <p>
                 Congrats! By this point, you know how to perform basic
-                operations, such as creating tables, and adding, updating, and
-                removing data. Before you move on, however, I'd like to show you
-                one more basic but powerful feature: loading data-sets.
-                EASYTable currently supports two formats; <span
+                CRUD operations! Before you move on, however, I'd like to show
+                you
+                one more basic, but powerful, feature: loading data-sets.
+                EASYTable currently supports two data formats; <span
                     class="option">CSV</span> and <span
                     class="option">JSON</span>. That
                 means if you have tabular data in either of these formats, you
                 can use the built-in methods to quickly load them into an
-                instance of EASYtable.
+                instance of EASYTable.
             </p>
             <p>
-                Note that EASYTable can only transform data from these formats;
+                Note that EASYTable can only <i>transform</i> data from these
+                formats;
                 it is up to you, the developer, to get the data-set from your
                 desired source (API call / database / local file).
             </p>

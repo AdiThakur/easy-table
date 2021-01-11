@@ -36,9 +36,10 @@
             <p>
                 Here you will find the complete and detailed list of features
                 and functionalities offered by the EASYTable libary. Please
-                visit the getting-started page for setup help, and to get an
-                elemental understanding of the basic usage. For more advanced
-                use-cases, please visit the examples page.
+                visit the getting-started page for setup help, and to get a
+                basic understanding of the library's core features. For a demo
+                of some of the more
+                advanced features, please visit the examples page.
             </p>
         </div>
 
@@ -81,7 +82,13 @@
                 <p><span class="option">1</span>, <span class="option">2</span>,
                     or <span class="option">3</span>.
                     Sets the corresponding default
-                    styles provided by the library</p>
+                    styles provided by the library. Defaults to style <span
+                        class="option">1</span> if none of the three style
+                    attributes are set (<span
+                        class="option">defaultStyle</span>, <span
+                        class="option">stylesheet</span>, or <span
+                        class="option">cssText</span>).
+                </p>
 
                 <p>
                     <span class="option">stylesheet</span>
@@ -91,7 +98,7 @@
                     Path to custom CSS file. Note that each EASYTable DOM
                     element
                     is
-                    encapsulated within a shadow-root; Selectors designed for
+                    encapsulated within a shadow-root; selectors designed for
                     the
                     table will not affect the rest of the HTML.
                 </p>
@@ -159,9 +166,6 @@
 
             </div>
 
-            <h3>Return</h3>
-            <p>N/A</p>
-
             <h3>Example</h3>
             <p class="code">
                 const myTable = new EasyTable("myTable", "main", { <br>
@@ -185,8 +189,8 @@
             <p>
                 EASYTable takes a Pythonic approach in defining the accesibility
                 of its attributes; there are many internal attributes which are
-                accessible, but are not designed to be externally modified. We
-                leave it to the user's discretion to access and modify
+                accessible, but are not designed to be externally modified. It
+                is left to the user's discretion to access and modify
                 attributes such as the underlying HTMLElement* objects
                 <span class="option">table</span>,
                 <span class="option">header</span>,
@@ -196,8 +200,8 @@
             </p>
             <p>
                 If you need access to a particular attribute, please check the
-                rest of the documentation; there might a method that solves your
-                issues!
+                rest of the documentation first; you might find a built-in
+                solution!
             </p>
 
             <!-- <span class="param">currPage</span>
@@ -275,10 +279,6 @@
             <p class="code">
                 myTable.saveToCSV()
             </p>
-            <h3>Parameters</h3>
-            <p>
-                None
-            </p>
 
             <h3>Return</h3>
             <p>
@@ -291,10 +291,6 @@
             <h3>Syntax</h3>
             <p class="code">
                 myTable.saveToJSON()
-            </p>
-            <h3>Parameters</h3>
-            <p>
-                None
             </p>
 
             <h3>Return</h3>
@@ -322,8 +318,6 @@
             <p class="code">
                 myTable.getRowCount()
             </p>
-            <h3>Parameters</h3>
-            <p>None</p>
 
             <h3>Return</h3>
             <p>
@@ -439,9 +433,6 @@
                 myTable.popRow()
             </p>
 
-            <h3>Parameters</h3>
-            <p>None</p>
-
             <h3>Return</h3>
             <p><span class="option">true</span> on success, <span
                     class="option">false</span> otherwise.
@@ -500,6 +491,20 @@
                     class="option">null</span> otherwise.
             </p>
 
+            <!-- getCells -->
+
+            <h2 class="method">getCells()</h2>
+            <p>Gets all of the cells in the table.</p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.getCells()
+            </p>
+
+            <h3>Return</h3>
+            <p>An array of <span class="option">HTMLTableCellElement</span>
+                elements.</p>
+
             <!-- setCell -->
 
             <h2 class="method">setCell()</h2>
@@ -545,12 +550,31 @@
             <p class="code">
                 myTable.getColCount()
             </p>
-            <h3>Parameters</h3>
-            <p>None</p>
 
             <h3>Return</h3>
             <p>
                 Number of columns in the table.
+            </p>
+
+            <!-- getCol -->
+            <h2 class="method">getCol()</h2>
+            <p>
+                Returns the cells of the specified column.
+            </p>
+
+            <h3>Syntax</h3>
+            <p class="code">
+                myTable.getCol(index)
+            </p>
+
+            <h3>Parameters</h3>
+
+            <h4><span class="param">index</span></h4>
+            <p>Index of the desired column.</p>
+
+            <h3>Return</h3>
+            <p>
+                An array of the cells of the column at the specified index.
             </p>
 
             <!-- appendCol -->
@@ -696,9 +720,6 @@
                 myTable.resetTable()
             </p>
 
-            <h3>Parameters</h3>
-            <p>None</p>
-
             <h3>Return</h3>
             <p>None</p>
         </div>
@@ -774,9 +795,6 @@
                 myTable.prevPage()
             </p>
 
-            <h3>Parameters</h3>
-            <p>None</p>
-
             <h3>Return</h3>
             <p>None</p>
 
@@ -789,9 +807,6 @@
             <p class="code">
                 myTable.nextPage()
             </p>
-
-            <h3>Parameters</h3>
-            <p>None</p>
 
             <h3>Return</h3>
             <p>None</p>

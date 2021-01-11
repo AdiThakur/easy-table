@@ -35,9 +35,8 @@
             <h2>Further Usage</h1>
                 <p>
                     In this demo, we continue our example of creating a table
-                    that contains a bunch of cool cars and cover some
-                    features that weren't discussed in the getting-started
-                    example.
+                    that contains a bunch of cool cars, and cover some
+                    features that weren't previously discussed.
                 </p>
                 <p>Lets go!</p>
         </div>
@@ -46,13 +45,14 @@
             <h2>Step 1: Creating the Table</h2>
             <h4> Constructor</h4>
             <p>
-                As before, I want to create a table that intitially has three
+                Like the previous example, I want to create a table that
+                initially has three
                 columns;
                 <span class="option">"Model"</span>,
                 <span class="option">"Brand"</span>, and
-                <span class="option">"Year"</span>
-                Additionally, I also want the end users to be able to search
-                the rows, as well as sort the table based off its columns, but
+                <span class="option">"Year"</span>.
+                Additionally, I want the end users to be able to search
+                the rows, as well as sort the table by its columns, but
                 only in ascending order.
             </p>
             <p>Keeping the above specification in mind, I call the constructor
@@ -72,10 +72,10 @@
                 <span class="option">defaultSort = true</span>,
                 even though I said I wanted to enable sorting. This is
                 because
-                I want to use custom elements to let users sort columns.
+                I want to use a custom element to let users sort columns.
                 Additionally, the default sort buttons allow users to sort
                 the
-                columns in ascending OR descending order; I don't want to
+                columns in both ascending and descending order; I don't want to
                 allow
                 the latter.
             </p>
@@ -89,7 +89,7 @@
             </p>
             <p class="code">
                 sortButton.onclick = (event) => { <br>
-                &emsp;&emsp;&emsp;event.preventDefault() <br>
+                <!-- &emsp;&emsp;&emsp;event.preventDefault() <br> -->
                 &emsp;&emsp;&emsp;myTable.sort(input.value, 1)
                 }
             </p>
@@ -98,7 +98,7 @@
                 sorted in ascending order.
             </p>
             <p>
-                Creating custom searcbars and
+                Creating custom searchbars and
                 navigation buttons is very similar; create your elements,
                 and
                 call the corresponding methods in the
@@ -117,7 +117,7 @@
             <h2>Step 2: Adding Data</h2>
             <h4>Loading Data</h4>
             <p>
-                Instead of repeadtly calling
+                Instead of repeatedly calling
                 <span class="option">.appendRow()</span> or
                 <span class="option">.insertRow()</span>,
                 I'm going to load the data from a
@@ -133,15 +133,31 @@
             <h4>Adding Columns</h4>
             <p>
                 Now that I've loaded the data, I feel like the table is not
-                descriptive enough. I now want to add a two more columns.
+                descriptive enough; I want to add another column.
             </p>
             <p>
-                I want to add the first new column,
-                <span class="option">Likes</span>, so that it is the very
-                first column of the table. Also, I want to set each new cell to
+                I want the new
+                <span class="option">Likes</span> column to be the new first
+                column of the table. Also, I want to set each new cell to
                 have a specific value. I can achieve this by calling the
-                <span class="option">.insertCol()</span> method.
+                <span class="option">.insertCol()</span> method. This method
+                takes in the following parameters:
+                <span class="option">index</span>,
+                <span class="option">header</span>,
+                <span class="option">defaultData</span>, and
+                <span class="option">dataSet</span>.
             </p>
+
+            <p>
+                Given the requirements, I
+                call the method with the following arguments. Note that I set
+                the <span class="option">defaultData</span> argument as <span
+                    class="option">null</span>. This is to let the method know
+                that I do NOT want each of the new cells to have a default
+                value; rather, I want to assign each cell a unique value, as
+                specified by the last argument.
+            </p>
+
             <p class="code">
                 myTable.insertCol(0, "Likes", null, [1, 2.5, 4, 5, 7, 8.5,
                 9])
@@ -162,29 +178,20 @@
                 <span class="option">Likes</span>
                 column to increment the count. We can do this easily by taking
                 advantage of the
-                <span class="option">.getCell()</span> method, which returns a
-                <span class="option">HTMLTableCellElement</span>.
+                <span class="option">.getCol()</span> method, which returns a
+                array of
+                <span class="option">HTMLTableCellElement</span> from the
+                specified column.
             </p>
             <p>
-                We will also need the help of two getters
-                <span class="option">.getRowCount()</span>
-                <span class="option">.getColCount()</span>.
-                The following code implements the desired functionality. Try it
-                out!
+                First, we get the cells. Then, we iterate over each cell,
+                setting its <span class="option">ondblclick</span> callback as
+                shown below.
             </p>
 
-            <pre class="code">
-for (let i = 0; i < myTable.getRowCount(); i++) {
-    for (let j = 0; j < myTable.getColCount; j++) {
-        const cell = step3.getCell(i, j)
-        cell.ondblclick = () => {
-            if (j == 0) {
-                cell.innerText = parseInt(cell.innerText) + 1
-            }
-        }
-    }
-}</pre>
-
+            <pre class="code">myTable.getCol().forEach(cell => {
+    cell.ondblclick = () => {cell.innerText = parseInt(cell.innerText) + 1}
+})</pre>
 
             <h4>Result</h4>
 
@@ -196,7 +203,7 @@ for (let i = 0; i < myTable.getRowCount(); i++) {
         <div class="step">
             <h2>Step 4: Saving Data</h2>
             <p>
-                Finally, I have some data on which cars people like the most,
+                Now, I have some data on which cars people like the most,
                 and which they like the least. I would like to store this newly
                 collected data.
                 Luckily, EASYTable provides save methods that correspond to the
@@ -206,14 +213,16 @@ for (let i = 0; i < myTable.getRowCount(); i++) {
             </p>
 
             <p>
-                In this case, I want to store it as a <span
-                    class="option">CSV</span>, so I call the following method.
+                In this case, I want to store my data in the <span
+                    class="option">CSV</span> format, so I call the following
+                method.
                 Please visit the documentation to learn more about the
                 <span class="option">JSON</span> variant of this method.
             </p>
 
             <p class="code">
-                const csvString = myTable.saveToCSV()
+                const csvString = myTable.saveToCSV() <br>
+                console.log(csvString)
             </p>
 
             <h4>Result</h4>
@@ -233,6 +242,8 @@ for (let i = 0; i < myTable.getRowCount(); i++) {
 
 
     </div>
+
+
 </body>
 
 </html>

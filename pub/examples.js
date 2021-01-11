@@ -85,21 +85,29 @@ sortButton3.onclick = () => {
 
 step3.insertCol(0, "Likes", null, [1, 2, 4, 5, 7, 8, 9])
 
-const rows = step3.getRowCount()
-const cols = step3.getColCount()
+// const rows = step3.getRowCount()
+// const cols = step3.getColCount()
 
-for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-        const cell = step3.getCell(i, j)
-        cell.ondblclick = () => {
-            if (j == 0) {
-                cell.innerText = parseInt(cell.innerText) + 1
-            }
-        }
+// for (let i = 0; i < rows; i++) {
+//     for (let j = 0; j < cols; j++) {
+//         const cell = step3.getCell(i, j)
+//         cell.ondblclick = () => {
+//             if (j == 0) {
+//                 cell.innerText = parseInt(cell.innerText) + 1
+//             }
+//         }
+//     }
+
+// }
+
+step3.getCol(0).forEach(cell => {
+    cell.ondblclick = () => {
+        cell.innerText = parseInt(cell.innerText) + 1
     }
+})
 
-}
-
+console.log(step3.saveToCSV())
+console.log(step3.saveToJSON())
 
 
 
