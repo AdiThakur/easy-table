@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/csc309-fall-2020/js-library-thakur15#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.18.2"
   }
 }
